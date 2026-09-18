@@ -1,0 +1,34 @@
+# Secrets and local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+
+# n8n
+.n8n/
+n8n-*.json.bak
+**/credentials/
+
+# instruct-ai local state
+.instruct-ai/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# OS and editors
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/
+
+# Misc
+*.log
+tmp/
+temp/

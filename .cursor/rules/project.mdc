@@ -1,0 +1,29 @@
+---
+description: Project structure and working sequence for iqms-complaintmanagement-redesign
+alwaysApply: true
+---
+
+# Project map
+
+**iqms-complaintmanagement-redesign** — documentation-first repo. Sequence: as-is process → requirements → architecture → functional spec → design spec → n8n workflows.
+
+| Work | Path |
+| --- | --- |
+| Overview | `docs/00-overview/` |
+| As-is process | `docs/01-current-process/` |
+| Requirements | `docs/02-requirements/` |
+| Architecture | `docs/03-architecture/` |
+| Functional spec | `docs/04-functional-spec/` |
+| Design spec | `docs/05-design-spec/` |
+| ADRs | `docs/06-decisions/` |
+| n8n JSON | `workflows/` |
+| Env notes | `config/` |
+
+## Rules
+
+- Keep as-is and to-be in separate files. As-is only in `docs/01-current-process/`.
+- Do not invent architecture or n8n workflows until requirements are agreed.
+- Prefer Markdown in `docs/`. Link glossary terms from `docs/02-requirements/glossary.md`.
+- Never commit secrets, credentials, or production complaint / PII data.
+- Link SharePoint Draw.io files; do not copy binaries unless asked.
+- New interviews: `docs/templates/process-interview.md` → `docs/01-current-process/sources/`.

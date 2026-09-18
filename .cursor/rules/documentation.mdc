@@ -1,0 +1,16 @@
+---
+description: Markdown documentation conventions for this repo
+globs: docs/**/*.md
+alwaysApply: false
+---
+
+# Documentation
+
+- One H1 per file, matching the topic.
+- Date plus source on interview notes (`docs/01-current-process/sources/`).
+- Use mermaid for process and architecture flows; keep node IDs without spaces.
+- Link glossary terms instead of redefining them.
+- Requirements: stable IDs (`FR-001`, `NFR-001`), one testable capability, no n8n node names.
+- Spec stubs: fill sections in place; do not create a parallel tree.
+- Do not paste production case content, personal data, or secrets.
+- Record product choices as ADRs in `docs/06-decisions/`.
