@@ -1,0 +1,30 @@
+---
+description: Keep docs consistent when anything changes — impact map and same-change rule
+alwaysApply: true
+---
+
+# Docs freshness
+
+This repo’s product is Markdown under `docs/`. Content changes must land in **every affected file in the same session**. Do not defer documentation.
+
+## Impact map
+
+| If you change | Also update |
+| --- | --- |
+| Interview / source note | `docs/01-current-process/sources/` **and** `as-is-process.md` / `systems-and-tools.md` when the shared picture changes |
+| New or renamed term | `docs/02-requirements/glossary.md`; link the term, do not redefine it elsewhere |
+| New capability | Stable ID in `functional-requirements.md` (`FR-00x`) or `non-functional-requirements.md` (`NFR-00x`) |
+| Product or architecture choice | New or updated ADR in `docs/06-decisions/` (not only the chat) |
+| Phase or agreement status | The matching row in `docs/README.md` (the only status index) and `Last reviewed` on that folder README |
+| n8n workflow JSON (later) | Matching sections in `docs/05-design-spec/` and an ADR if the choice is new |
+
+## Do not
+
+- Edit only one file when the same fact is stated elsewhere.
+- Put to-be design into `docs/01-current-process/`.
+- Invent architecture, functional spec, design spec, or workflows until requirements are agreed.
+- Auto-rewrite docs via hooks; ask or patch files explicitly.
+
+## Session close
+
+List which docs you changed and which related docs you **did not** change, with a reason.

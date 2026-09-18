@@ -1,5 +1,8 @@
 # Architecture
 
+Status: Later  
+Last reviewed: 2026-09-18
+
 Fill this **after** the as-is process and requirements are agreed.
 
 This folder is for:

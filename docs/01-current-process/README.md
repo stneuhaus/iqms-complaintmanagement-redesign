@@ -1,5 +1,8 @@
 # Current (as-is) process
 
+Status: In progress  
+Last reviewed: 2026-09-18
+
 Describe **how work is done today**, not how automation should work.
 
 | File | Contents |

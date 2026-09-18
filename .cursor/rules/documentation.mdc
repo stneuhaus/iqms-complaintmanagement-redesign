@@ -14,3 +14,5 @@ alwaysApply: false
 - Spec stubs: fill sections in place; do not create a parallel tree.
 - Do not paste production case content, personal data, or secrets.
 - Record product choices as ADRs in `docs/06-decisions/`.
+- Folder READMEs: `Status:` Draft | In progress | Agreed | Later, plus `Last reviewed: YYYY-MM-DD`.
+- `docs/README.md` is the only status index; update its row when a folder’s status changes.

@@ -26,3 +26,5 @@ This repository is **iqms-complaintmanagement-redesign**, a documentation-first 
 - Never commit secrets, credentials, PHI/PII dumps, or production complaint data.
 - Source Draw.io files remain in the Bayer SharePoint folder; link them, do not copy binaries unless explicitly asked.
 - New process interviews go in `docs/01-current-process/sources/` using `docs/templates/process-interview.md`.
+- Keep related docs in the **same change**: source notes with as-is/systems; new terms in the glossary; new capabilities as `FR-`/`NFR-` IDs; product choices as ADRs; phase status in `docs/README.md`.
+- At the end of a session, list which docs you changed and which related docs you deliberately did not change (and why).

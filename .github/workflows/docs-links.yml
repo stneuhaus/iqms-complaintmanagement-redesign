@@ -1,0 +1,24 @@
+name: Markdown links
+
+on:
+  push:
+    paths:
+      - "**/*.md"
+      - scripts/check-markdown-links.py
+      - .github/workflows/docs-links.yml
+  pull_request:
+    paths:
+      - "**/*.md"
+      - scripts/check-markdown-links.py
+      - .github/workflows/docs-links.yml
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check relative Markdown links
+        run: python scripts/check-markdown-links.py

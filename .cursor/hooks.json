@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "hooks": {
+    "stop": [
+      {
+        "type": "prompt",
+        "loop_limit": 1,
+        "timeout": 20,
+        "prompt": "Documentation-freshness reminder for iqms-complaintmanagement-redesign. Do not rewrite files yourself. If this turn changed process notes, requirements, terms, decisions, phase status, or later workflow JSON, check the impact map: related docs in the same change; docs/README.md if status changed; glossary for new terms; ADR for product choices. If something is still missing, follow up once so the agent updates those files or states they were skipped and why. If docs are already consistent or the turn was unrelated, do not follow up. Never invent architecture or n8n workflows. Never add PII. Hook input: $ARGUMENTS"
+      }
+    ]
+  }
+}

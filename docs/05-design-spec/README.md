@@ -1,5 +1,8 @@
 # Design specification
 
+Status: Later  
+Last reviewed: 2026-09-18
+
 Fill this **after** architecture and the functional specification exist.
 
 This document states **how** the solution will be built: n8n workflows, integrations, error handling, and operational concerns.

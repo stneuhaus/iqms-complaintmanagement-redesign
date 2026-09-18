@@ -1,5 +1,8 @@
 # Requirements
 
+Status: In progress  
+Last reviewed: 2026-09-18
+
 Capture **what** the automation must achieve. Do not put solution design here (that belongs in architecture and the design specification).
 
 | File | Contents |

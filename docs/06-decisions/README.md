@@ -1,5 +1,8 @@
 # Decisions
 
+Status: In progress  
+Last reviewed: 2026-09-18
+
 Architecture decision records (ADRs). One file per decision, copied from [adr-template.md](adr-template.md).
 
 Suggested first decisions when ready:

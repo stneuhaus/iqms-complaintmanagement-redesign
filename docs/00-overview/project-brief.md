@@ -1,5 +1,8 @@
 # Project brief
 
+Status: Draft  
+Last reviewed: 2026-09-18
+
 **Project:** iqms-complaintmanagement-redesign
 
 ## Purpose
