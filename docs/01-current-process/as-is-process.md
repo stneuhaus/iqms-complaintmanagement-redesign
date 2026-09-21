@@ -112,6 +112,7 @@ flowchart TD
 
 ## Open questions
 
-- Exact names and owners of the ticket tool, SSF, and tracking workbook
-- Whether Consumer Health vs Pharma paths diverge beyond Synaps
+- Confirm whether SSF and ServiceNow are the same ticket tool (URS says ServiceNow; shadowing says SSF) and who owns the PTC tracking workbook
+- Whether Consumer Health vs Pharma paths diverge beyond Synaps / Pharma lists
 - Which steps are in scope for the first n8n automation (translation, categorization, extraction were mentioned in a system-landscape MVP diagram)
+- Regulatory transfer deadlines for AE/PTC (open requirement on the MVP Zielprozess diagram: complete PTC or transfer after 5 days)

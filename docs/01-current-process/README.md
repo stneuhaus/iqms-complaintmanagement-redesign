@@ -10,6 +10,7 @@ Describe **how work is done today**, not how automation should work.
 | [as-is-process.md](as-is-process.md) | Consolidated as-is steps from shadowing |
 | [systems-and-tools.md](systems-and-tools.md) | Systems, spreadsheets, and handoffs |
 | [sources/](sources/) | Dated interview / shadowing notes |
+| [sources/2026-09-18-enterprise-extract-actors-systems-data-interactions.xlsx](sources/2026-09-18-enterprise-extract-actors-systems-data-interactions.xlsx) | EA extract: actors, systems, data objects, interactions (as-is + to-be + URS; Layer column) |
 
 ## SharePoint diagrams (not copied into git)
 
