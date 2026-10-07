@@ -52,6 +52,8 @@ Falls das gewünschte Ausgabeformat technisch nicht erstellt werden kann:
   - Kommentare: HTML kennt keine Word-Kommentare. Gib den Kommentarinhalt sowohl als `title`-Attribut am betroffenen `<span>` als auch als sichtbare Fußnote am Seitenende aus.
 - Gib die Tabelle „Trustworthiness" der Präambelseite als reguläre `<table>` aus. Die Fußnote dazu gibst du als sichtbaren, verlinkten Absatz unmittelbar unter der Tabelle aus, da HTML keine Word-Fußnoten kennt.
 
+Die unter „Ausgabedateien" beschriebene Markdown-Fassung ist **kein** Ersatzformat im Sinne dieses Abschnitts. Sie wird zusätzlich und unabhängig davon erzeugt, ob das DOCX erstellt werden konnte.
+
 ## GRUNDREGELN
 
 ### Folgende Grundregeln musst Du beachten:
@@ -616,7 +618,7 @@ Seiten ohne erkennbare Probleme können zusammengefasst werden. Problematische S
 Erstelle zusätzlich zur übersetzten Datei einen strukturierten Qualitätsbericht mit folgendem Aufbau:
 
 Name der verarbeiteten Datei
-Name der erzeugten Datei
+Namen aller erzeugten Dateien, einschließlich der Markdown-Fassung
 Name des verwendeten LLMs
 Name der verwendeten Promptdatei
 Version der verwendeten Promptdatei.
@@ -667,6 +669,9 @@ Prüfe vor der Fertigstellung:
 - Die Summe der je Seite gezählten Kommentare muss der im Abschlussbericht genannten Gesamtzahl gesetzter Kommentare entsprechen.
 - Jedes als [UNCLEAR] oder [ILLEGIBLE] klassifizierte Segment muss sowohl einen Kommentar als auch einen Eintrag unter „Manuell zu prüfende Stellen" besitzen.
 - Jedes Segment der Herkunft `HANDWRITING` oder `SIGNATURE` muss im Ausgabedokument in #1F3FA8 eingefärbt sein.
+- Die Markdown-Fassung muss inhaltlich mit dem Übersetzungsdokument übereinstimmen. Gleiche dazu Überschriften, Anzahl der Tabellen sowie alle Zahlen, Datumsangaben und Identifikatoren ab.
+- Jedes im Übersetzungsdokument in #1F3FA8 eingefärbte Segment muss in der Markdown-Fassung als `[HW]…[/HW]` erscheinen. Die Anzahl muss der im Abschlussbericht genannten Gesamtzahl handschriftlicher Segmente entsprechen.
+- Die Markdown-Fassung darf keine Bestandteile der Präambelseite enthalten.
 - Die Tabelle „Trustworthiness" auf der Präambelseite muss genau N Seitenzeilen zuzüglich der Gesamtzeile enthalten, wobei N der programmatisch ermittelten Seitenzahl entspricht.
 - Jeder Wert in dieser Tabelle muss mit der seitenbezogenen Bewertung aus Phase 9 übereinstimmen, die Gesamtzeile mit dem Confidence Index aus Phase 8.
 - In Stufe 1 der Rückfallkaskade muss jedes handschriftliche Segment kommentiert sein. Wurde Stufe 2 oder 3 verwendet, genügt die Kommentierung der unsicheren Stellen; der reduzierte Umfang muss dann unter „Einschränkungen" dokumentiert sein.
@@ -685,6 +690,90 @@ Erzeuge das eigentliche Übersetzungsdokument und benenne dieses wie folgt:
   - %Original Name%_Translated by AI.html
 - Das Übersetzungsodokument enthält nur Inhalte die im Originalen ebenfalls vorzufinden sind. Es darf z.B. keine spezifische Kopf- oder Fußleiste, kein Wasserzeichen und keine sonstige inhaltliche Markierung hinzugefügt werden.
 - Ausgenommen von dieser Regel sind ausdrücklich die in Phase 6 vorgeschriebenen Prüfhilfen: die blaue Einfärbung handschriftlicher Inhalte (#1F3FA8) und die Word-Kommentare. Diese gelten nicht als inhaltliche Ergänzung, da sie keinen Text hinzufügen, sondern die Herkunft und Erkennungssicherheit des vorhandenen Textes kenntlich machen. Sie sind verbindlich zu setzen.
+
+## Markdown-Fassung der Übersetzung
+
+Erzeuge zusätzlich zum Übersetzungsdokument eine Markdown-Datei und benenne diese wie folgt:
+
+- %Original Name%_Translated by AI.md
+
+### Zweck
+
+Diese Datei wird im nachgelagerten technischen Prozess maschinell weiterverarbeitet, um inhaltliche Rückfragen an das übersetzte Dokument zu beantworten, beispielsweise nach dem betroffenen Produkt oder einer genannten Chargennummer. Priorisiere deshalb eine klare, verlässlich auswertbare Struktur und die korrekte Zuordnung von Bezeichnung und Wert. Optische Schönheit ist nachrangig.
+
+### Inhalt
+
+- Die Datei enthält denselben übersetzten Inhalt wie das Übersetzungsdokument.
+- Sie enthält **keine** Präambelseite, also keinen Disclaimer, keine Legende, keine Translator's note und keine Tabelle „Trustworthiness".
+- Fasse keinen Inhalt zusammen, lasse nichts aus und ergänze nichts. Inhaltliche Abweichungen zwischen dem Übersetzungsdokument und der Markdown-Datei sind unzulässig.
+- Erzeuge diese Datei auch dann, wenn die Erstellung des DOCX technisch fehlschlägt. Sie ist vom Übersetzungsdokument unabhängig.
+
+### Layoutabbildung in Markdown
+
+Bilde das Layout des Übersetzungsdokuments so weit ab, wie Markdown es zulässt:
+
+| Element im Original | Entsprechung in Markdown |
+| ------------------------------------------ | ---------------------------------------------------------------- |
+| Überschriftenhierarchie | ATX-Überschriften `#`, `##`, `###` entsprechend der Ebene |
+| Absätze | durch Leerzeile getrennt |
+| Tabellen | GFM-Pipe-Tabellen mit Kopfzeile |
+| verbundene Zellen, verschachtelte Tabellen | GFM-Tabelle soweit darstellbar, sonst HTML-`<table>` |
+| nummerierte Listen | `1.`, `2.`, `3.` |
+| Aufzählungen | `-` |
+| Formularfelder | zweispaltige Tabelle mit den Spalten `Field` und `Value` |
+| Ankreuzfelder | `[x]` für angekreuzt, `[ ]` für nicht angekreuzt |
+| Fettdruck | `**Text**` |
+| Kursivschrift | `*Text*` |
+| Fuß- und Endnoten | am Ende des zugehörigen Abschnitts |
+| nicht reproduzierbare Bilder | `[IMAGE]` gefolgt von der übersetzten Bildunterschrift |
+| Stempel | `[STAMP: übersetzter Inhalt]` |
+| Kopf- und Fußzeilen | einmalig am Dokumentanfang beziehungsweise -ende |
+
+Ergänzende Regeln:
+
+- Maßgeblich ist die in Phase 3 rekonstruierte logische Lesereihenfolge. Linearisiere mehrspaltige Layouts entsprechend.
+- Bilde **keine** Seitenumbrüche ab und füge keine Seitenmarker ein. Der Text läuft durchgehend.
+- Wiederhole wiederkehrende Kopf- und Fußzeilen nicht auf jeder Seite, da sie bei der maschinellen Auswertung nur Rauschen erzeugen.
+- Die Tabellenstruktur hat Vorrang vor der optischen Ähnlichkeit. Gib eine rekonstruierbare Tabelle niemals als Fließtext aus.
+
+### Kennzeichnung von Herkunft und Unsicherheit
+
+Markdown kennt weder Schriftfarben noch Kommentare. Übernimm die Informationen aus der Herkunftsklassifikation deshalb als Inline-Marker:
+
+- Segmente der Herkunft `HANDWRITING` und `SIGNATURE`: in `[HW]` und `[/HW]` einschließen. Dies ist das Markdown-Äquivalent zur blauen Einfärbung im Übersetzungsdokument.
+- Unsichere Erkennungen: `[UNCLEAR: beste Lesart]` wird hier **inline** ausgegeben. Dies ist die einzige Ausnahme vom Hybrid-Modell aus Phase 6 und gilt ausschließlich für diese Datei.
+- Nicht lesbare Inhalte: `[ILLEGIBLE]`.
+- Stempelinhalte: `[STAMP: übersetzter Inhalt]`.
+- Die Marker gelten auch innerhalb von Tabellenzellen.
+- Diese Marker erscheinen **ausschließlich** in der Markdown-Datei. Im Übersetzungsdokument gelten unverändert die blaue Einfärbung und die Word-Kommentare aus Phase 6.
+
+Beispiel:
+
+```text
+| Field     | Value                           |
+| --------- | ------------------------------- |
+| Product   | Aspirin 500 mg                  |
+| Lot no.   | [HW]4B712[/HW] [UNCLEAR: 4B7I2] |
+| Signature | [HW][ILLEGIBLE][/HW]            |
+```
+
+### YAML-Frontmatter
+
+Beginne die Datei mit folgendem Metadatenblock. Verwende die Schlüssel unverändert:
+
+```text
+---
+source_file: <Name der Quelldatei>
+source_language: <Ausgangssprache>
+target_language: <verwendete englische Sprachvariante>
+pages: <programmatisch ermittelte Seitenzahl>
+confidence_index: <Confidence Index aus Phase 8 als ganze Zahl>
+handwritten_segments: <Gesamtzahl handschriftlicher Segmente>
+quality_report: <Dateiname des Qualitätsberichts>
+---
+```
+
+Der Frontmatter ist ein maschinenlesbarer Metadatenkopf und keine Präambel. Er enthält keinen Disclaimer-Fließtext. Übernimm die Werte unverändert aus den Phasen 8, 9 und 10 und berechne sie hier nicht neu. Unmittelbar nach dem Frontmatter beginnt der übersetzte Inhalt.
 
 ## Qualitätsbericht
 
@@ -751,18 +840,19 @@ Stelle Data Privacy sicher, indem Du:
 - Alle erhaltenen Dateien löscht.
 - Sämtliche caches der verwendeten Tools leerst
 - Sicherstellst, dass die, von den verwendeten Tools erzeugten temporären Dateien, gelöscht wurden. Sofern dies nicht der Fall war, lösche die Dateien.
-- Die Ergebnisdateien sollen maximal 15 Minuten vorgehalten werden. Ist diese Zeitspanne überschritte, lösche die Dateien.
+- Die Ergebnisdateien sollen maximal 15 Minuten vorgehalten werden. Ist diese Zeitspanne überschritte, lösche die Dateien. Dies gilt ausdrücklich auch für die Markdown-Fassung, da sie denselben Inhalt in maschinell leicht weiterverarbeitbarer Form enthält.
 
 ## Ignore this chapter
 
-$prompt_file_version: 0.3
+$prompt_file_version: 0.4
 
 $prompt_file_name: translate_file_into_en.md
 
 $author: stefan.neuhaus@bayer.com
 
-| version | author | comment                                                                                                        |
-| ------- | ------ | -------------------------------------------------------------------------------------------------------------- |
-| 0.1     | imnes  | initial                                                                                                        |
-| 0.2     | imnes  | Handschrift/Unterschriften blau (#1F3FA8), Word-Kommentare, Herkunftsklassifikation                            |
-| 0.3     | imnes  | Abschnitt Trustworthiness auf Praeambelseite: Confidence je Seite + Gesamtwert, Fussnote auf Qualitaetsbericht |
+| version | author | comment                                                                                                         |
+| ------- | ------ | --------------------------------------------------------------------------------------------------------------- |
+| 0.1     | imnes  | initial                                                                                                         |
+| 0.2     | imnes  | Handschrift/Unterschriften blau (#1F3FA8), Word-Kommentare, Herkunftsklassifikation                             |
+| 0.3     | imnes  | Abschnitt Trustworthiness auf Praeambelseite: Confidence je Seite + Gesamtwert, Fussnote auf Qualitaetsbericht  |
+| 0.4     | imnes  | Zusaetzliche Ausgabedatei: Markdown-Fassung der Uebersetzung ohne Praeambel, mit Frontmatter und Inline-Markern |
