@@ -50,6 +50,7 @@ Falls das gewünschte Ausgabeformat technisch nicht erstellt werden kann:
 - Bilde die Kennzeichnung handschriftlicher Inhalte (siehe Phase 6) auch im HTML ab, damit sie die Konvertierung nach DOCX übersteht:
   - Handschrift und Unterschriften: `<span class="handwritten" style="color:#1F3FA8">…</span>` — die Farbe ist zusätzlich als Inline-Style zu setzen, da reine CSS-Klassen bei der Konvertierung häufig verloren gehen.
   - Kommentare: HTML kennt keine Word-Kommentare. Gib den Kommentarinhalt sowohl als `title`-Attribut am betroffenen `<span>` als auch als sichtbare Fußnote am Seitenende aus.
+- Gib die Tabelle „Trustworthiness" der Präambelseite als reguläre `<table>` aus. Die Fußnote dazu gibst du als sichtbaren, verlinkten Absatz unmittelbar unter der Tabelle aus, da HTML keine Word-Fußnoten kennt.
 
 ## GRUNDREGELN
 
@@ -583,10 +584,23 @@ Erstelle zusätzlich für jede Seite eine kompakte Bewertung mit:
 - OCR-Confidence in Prozent,
 - Übersetzungs-Confidence in Prozent,
 - Layout-Confidence in Prozent,
+- Seiten-Confidence in Prozent (siehe Berechnung unten),
 - Anzahl handschriftlicher Segmente (Herkunft `HANDWRITING` oder `SIGNATURE`),
 - Anzahl gesetzter Kommentare,
 - erkannte Problemstellen,
 - empfohlene manuelle Prüfung.
+
+#### Seiten-Confidence berechnen
+
+Fasse die drei Teilwerte je Seite zu einem Seiten-Confidence-Wert zusammen:
+
+Seiten-Confidence = (OCR-Confidence × 0,40) + (Übersetzungs-Confidence × 0,40) + (Layout-Confidence × 0,20)
+
+Runde auf eine ganze Prozentzahl. Die Gewichtung folgt der Logik aus Phase 8: Texterfassung und Übersetzungsgenauigkeit wiegen schwerer als die Layouttreue.
+
+Ordne jeder Seite zusätzlich die Qualitätsstufe nach der Interpretationsskala aus Phase 8 zu und vermerke, ob eine manuelle Prüfung der Seite empfohlen wird. Eine manuelle Prüfung ist mindestens dann zu empfehlen, wenn die Seiten-Confidence unter 80 % liegt oder die Seite [UNCLEAR]- oder [ILLEGIBLE]-Stellen enthält.
+
+Diese Werte sind die verbindliche Datenquelle für die Tabelle „Trustworthiness" auf der Präambelseite. Die dort ausgewiesenen Werte müssen mit den Werten dieser Phase übereinstimmen.
 
 Verifiziere vor der Fertigstellung ausdrücklich:
 
@@ -597,12 +611,15 @@ Verifiziere vor der Fertigstellung ausdrücklich:
 
 Seiten ohne erkennbare Probleme können zusammengefasst werden. Problematische Seiten müssen einzeln aufgeführt werden.
 
-### PHASE 10: ABSCHLUSSBERICHT
+### PHASE 10: Qualitätsbericht
 
 Erstelle zusätzlich zur übersetzten Datei einen strukturierten Qualitätsbericht mit folgendem Aufbau:
 
 Name der verarbeiteten Datei
 Name der erzeugten Datei
+Name des verwendeten LLMs
+Name der verwendeten Promptdatei
+Version der verwendeten Promptdatei.
 Gesamt Ergebnis
 erzeugtes Ausgabeformat,
 Anzahl verarbeiteter Seiten,
@@ -613,6 +630,7 @@ Gesamtzahl gesetzter Kommentare,
 verwendete Darstellungsstufe der Rückfallkaskade (Word-Kommentar, Fußnote oder Inline-Marker),
 verwendete Sprachvariante.
 Confidence Index
+Formel zur Berechnung des Confidence Wertes pro Seite als auch für das Gesamtdokument.
 Gesamtwert in Prozent,
 Qualitätsstufe,
 kurze Begründung.
@@ -649,6 +667,8 @@ Prüfe vor der Fertigstellung:
 - Die Summe der je Seite gezählten Kommentare muss der im Abschlussbericht genannten Gesamtzahl gesetzter Kommentare entsprechen.
 - Jedes als [UNCLEAR] oder [ILLEGIBLE] klassifizierte Segment muss sowohl einen Kommentar als auch einen Eintrag unter „Manuell zu prüfende Stellen" besitzen.
 - Jedes Segment der Herkunft `HANDWRITING` oder `SIGNATURE` muss im Ausgabedokument in #1F3FA8 eingefärbt sein.
+- Die Tabelle „Trustworthiness" auf der Präambelseite muss genau N Seitenzeilen zuzüglich der Gesamtzeile enthalten, wobei N der programmatisch ermittelten Seitenzahl entspricht.
+- Jeder Wert in dieser Tabelle muss mit der seitenbezogenen Bewertung aus Phase 9 übereinstimmen, die Gesamtzeile mit dem Confidence Index aus Phase 8.
 - In Stufe 1 der Rückfallkaskade muss jedes handschriftliche Segment kommentiert sein. Wurde Stufe 2 oder 3 verwendet, genügt die Kommentierung der unsicheren Stellen; der reduzierte Umfang muss dann unter „Einschränkungen" dokumentiert sein.
 
 Wenn eine dieser Prüfungen nicht aufgeht, gilt die Aufgabe als unvollständig und muss korrigiert werden.
@@ -698,8 +718,24 @@ Erzeuge ein oder zwei Prämbel Seite(n):
   Text displayed in blue was transcribed from handwritten source content, including signatures. Printed, machine-readable and stamped content is shown in its original color.
   Word comments provide, for each handwritten passage, the source text and the recognition confidence. Where recognition was uncertain or impossible, the comment is marked [UNCLEAR] or [ILLEGIBLE] and additionally states the nature of the problem and the recommended verification.
   Passages marked [ILLEGIBLE] could not be read at all. All commented passages are also listed in the accompanying quality report."
-- Die Präambelseite enthält abschließend folgenden Hinweis, ebenfalls in grauer Schriftfarbe. Setze die in geschweiften Klammern angegebenen Werte aus dem tatsächlich verarbeiteten Dokument ein und lasse nicht zutreffende Sätze weg:
-  "Translator's note: Source document is in {Ausgangssprache}. Target: {verwendete englische Sprachvariante}. This is a reconstructed, translated rendering of the source document{, which is a scanned and partly handwritten form — sofern zutreffend}. Images that could not be reproduced are indicated by [IMAGE]."
+- Die Präambelseite enthält anschließend folgenden Hinweis, ebenfalls in grauer Schriftfarbe. Setze die in geschweiften Klammern angegebenen Werte aus dem tatsächlich verarbeiteten Dokument ein und lasse nicht zutreffende Sätze weg:
+  "Translator's note: Source document {Name der zu übersetzenden Datein} is in {Ausgangssprache}. Target: {verwendete englische Sprachvariante}. This is a reconstructed, translated rendering of the source document{, which is a scanned and partly handwritten form — sofern zutreffend}. Images that could not be reproduced are indicated by [IMAGE]."
+- Die Präambelseite enthält als **letzten** Absatz den Abschnitt „Trustworthiness", ebenfalls in grauer Schriftfarbe, bestehend aus einer Überschrift, einem einleitenden Satz und einer Tabelle:
+  "Trustworthiness
+  The following table indicates the estimated reliability of the translated content for each page of this document.¹"
+- Füge unter diesem Absatz eine einfache Tabelle mit einer Zeile je Seite des Dokuments ein. Verwende folgende Spalten und englische Spaltenüberschriften:
+  - `Page` — die Seitennummer,
+  - `Confidence` — die Seiten-Confidence aus Phase 9 in Prozent,
+  - `Quality level` — die Qualitätsstufe nach der Interpretationsskala aus Phase 8,
+  - `Manual review` — `recommended`, wenn für diese Seite eine manuelle Prüfung empfohlen wird, sonst `not required`.
+- Regeln für die Tabelle:
+  - Die Tabelle enthält für **jede** Seite von 1 bis N genau eine Zeile. Fasse hier keine Seiten zusammen, auch wenn Phase 9 das für den Qualitätsbericht erlaubt.
+  - Die **letzte Zeile** weist den Wert für das Gesamtdokument aus. Verwende in der Spalte `Page` die Bezeichnung `Total (document)`, in der Spalte `Confidence` den Confidence Index aus Phase 8 und in der Spalte `Quality level` die zugehörige Qualitätsstufe. Hebe diese Zeile durch Fettdruck hervor.
+  - Verwende eine einfache, schlicht umrandete Tabelle ohne farbige Hintergründe.
+  - Die Werte müssen mit den Angaben in Phase 8, Phase 9 und dem Qualitätsbericht übereinstimmen. Berechne sie hier nicht neu.
+- Füge eine Fußnote mit dem Bezugszeichen `¹` ein, die auf den Qualitätsbericht verweist:
+  "¹ The confidence value is a reasoned quality estimate, not a proof of correctness. For an explanation of how it is calculated, what the quality levels mean, and which passages require manual verification, see the accompanying quality report: {Name der erzeugten Qualitätsberichtsdatei}."
+- Setze `{Name der erzeugten Qualitätsberichtsdatei}` auf den tatsächlichen Dateinamen nach dem Muster `%Original Name%_AI Translation Quality Report.docx`.
 
 # ABSCHLIESSENDE ANWEISUNG
 
@@ -719,13 +755,14 @@ Stelle Data Privacy sicher, indem Du:
 
 ## Ignore this chapter
 
-$prompt_file_version: 0.2
+$prompt_file_version: 0.3
 
 $prompt_file_name: translate_file_into_en.md
 
 $author: stefan.neuhaus@bayer.com
 
-| version | author | comment                                                                             |
-| ------- | ------ | ----------------------------------------------------------------------------------- |
-| 0.1     | imnes  | initial                                                                             |
-| 0.2     | imnes  | Handschrift/Unterschriften blau (#1F3FA8), Word-Kommentare, Herkunftsklassifikation |
+| version | author | comment                                                                                                        |
+| ------- | ------ | -------------------------------------------------------------------------------------------------------------- |
+| 0.1     | imnes  | initial                                                                                                        |
+| 0.2     | imnes  | Handschrift/Unterschriften blau (#1F3FA8), Word-Kommentare, Herkunftsklassifikation                            |
+| 0.3     | imnes  | Abschnitt Trustworthiness auf Praeambelseite: Confidence je Seite + Gesamtwert, Fussnote auf Qualitaetsbericht |
