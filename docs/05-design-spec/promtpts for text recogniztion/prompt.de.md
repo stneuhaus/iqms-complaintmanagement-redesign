@@ -79,6 +79,17 @@ Die unter „Ausgabedateien" beschriebene Markdown-Fassung ist **kein** Ersatzfo
 - Bei Unsicherheit darfst du den Inhalt nicht stillschweigend erraten.
 - Prozessiere sämtliche Anweisungen aus dieser Prompt-Datei. Überspringe keine Anweisung oder füge neue Anweisungen hinzu. Sofern du die Notwendigkeit siehtst den Prompt zu verändern, hinterlasse dies als Vermerk auf der Präamble Seite (Siehe weiter unten im Abschnitt Präamble)
 
+### Arbeitsökonomie
+
+Die folgenden Regeln beschreiben, **was** zu erreichen ist, nicht in wie vielen Einzelschritten. Arbeite deshalb bewusst sparsam:
+
+- Bündele Arbeitsschritte, wenn das Ergebnis dadurch identisch bleibt.
+- Verarbeite Seiten, Felder und Textabschnitte in einem Durchgang statt in Einzelaufrufen.
+- Wiederhole einen Arbeitsschritt nur bei einem konkreten Anlass, nicht vorsorglich.
+- Erzeuge Zwischenergebnisse nur, wenn sie für ein Endergebnis gebraucht werden.
+
+Diese Regel senkt nicht den fachlichen Anspruch. Vollständigkeit, Genauigkeit und die vorgeschriebenen Prüfungen bleiben unverändert verbindlich.
+
 ### Seitenzahl verbindlich ermitteln und abgleichen:
 
 - Ermittle die Seitenzahl der Datei programmatisch (z. B. aus den PDF-Metadaten / Seitenobjekten), nicht aus dem extrahierten Text.
@@ -116,25 +127,51 @@ Analysiere zunächst die gesamte PDF und ermittle:
 
 ### PHASE 2: TEXTERKENNUNG UND OCR
 
-#### Seitenweise Hochauflösungs-Rendering als Pflichtschritt:
+#### Rendering: bedarfsabhängig, nicht pauschal
 
-Rendere jede Seite der PDF einzeln als Rasterbild mit mindestens 300 DPI (bei kleiner oder dichter Schrift, Handschrift oder Stempeln 400–600 DPI) und führe die Text- und OCR-Erkennung auf diesen hochauflösenden Bildern durch — auch dann, wenn maschinenlesbarer Text vorhanden zu sein scheint.
-Verlasse dich nicht allein auf die automatische Textextraktion, da diese Handschrift, Ankreuzfelder, Stempel und mehrseitige Formulare unvollständig oder falsch wiedergeben kann.
-Verwende das Ergebnis mit der höheren Zuverlässigkeit. Wenn native Textextraktion und Bild-OCR voneinander abweichen, dokumentiere die Abweichung und bevorzuge die besser lesbare Quelle.
+Entscheide je Seite **einmal**, ob ein Rasterbild erforderlich ist:
 
-#### Gewählte Auflösung für OCR ist nicht frei wählbar
+- **Kein Rendering nötig** bei Seiten mit zuverlässig extrahierbarem maschinenlesbarem Text, die **keine** Handschrift, Unterschriften, Stempel, Ankreuzfelder und keinen Text in Bildern enthalten. Hier genügt die native Textextraktion.
+- **Rendering und OCR erforderlich** bei allen übrigen Seiten: gescannte Seiten, Seiten mit Handschrift, Unterschriften, Stempeln, Formular- oder Ankreuzfeldern, Text in Bildern sowie Seiten, deren native Extraktion lückenhaft, falsch sortiert oder auffällig wirkt.
+- Im Zweifel wird gerendert.
 
-##### Auflösungs- und OCR-Qualitätssicherung:
+Diese Unterscheidung ist notwendig, weil die automatische Textextraktion Handschrift, Ankreuzfelder, Stempel und mehrseitige Formulare unvollständig oder falsch wiedergeben kann — bei reinen Textseiten ohne solche Elemente liefert sie jedoch das zuverlässigere Ergebnis.
 
-- Verwende mindestens 300 DPI;
-- erhöhe die Auflösung schrittweise (z. B. 400, 600 DPI) für Bereiche mit
-  - niedriger OCR-Konfidenz,
-  - kleiner Schrift,
-  - Handschrift oder
-  - Stempeln,
-    und wiederhole die Erkennung.
+Wenn für eine Seite beide Quellen vorliegen und voneinander abweichen, dokumentiere die Abweichung und bevorzuge die besser lesbare Quelle.
 
-##### Wende vor der OCR Bildvorverarbeitung an:
+#### Auflösung: ein fester Wert, keine Eskalation
+
+Rendere alle zu rendernden Seiten in **einem** Durchgang mit **300 DPI**. Erhöhe die Auflösung nicht und wiederhole das Rendering **ganzer Seiten** nicht mit höheren Werten. Für eng begrenzte Ausschnitte gilt abweichend der nachfolgende Abschnitt „Ausschnitt-Nachprüfung".
+
+Begründung, damit diese Regel nicht „optimiert" wird: Die verarbeitende Schnittstelle skaliert jedes Eingabebild auf ihre eigenen Grenzen herunter. Für eine A4-Seite ist der Sättigungspunkt bereits bei rund 200 DPI erreicht — 300, 400 und 600 DPI ergeben exakt dasselbe Bild, das das Modell tatsächlich sieht. Höhere Renderauflösungen kosten Zeit und Arbeitsschritte, bringen keinerlei zusätzliches Detail und erzeugen durch die stärkere Herunterskalierung zusätzliche Artefakte, die die Handschrifterkennung verschlechtern können.
+
+#### Ausschnitt-Nachprüfung bei unlesbaren Stellen
+
+Wenn eine einzelne Stelle nach der Erkennung unlesbar bleibt, prüfe sie über einen eng begrenzten Ausschnitt nach:
+
+- **Rendere den Ausschnitt neu aus der PDF.** Schneide ihn **nicht** aus dem bereits vorhandenen 300-DPI-Seitenbild aus. Ein Ausschnitt aus dem Seitenbild enthält exakt dieselben Bildpunkte und bringt keinerlei zusätzliches Detail.
+- Begrenze den Ausschnitt auf die betroffene Stelle zuzüglich eines Rands von etwa 10 % je Seite, damit Ober- und Unterlängen, diakritische Zeichen und Feldgrenzen nicht abgeschnitten werden.
+- **Wähle die Renderauflösung nach der Größe des Ausschnitts:** Render-DPI ≈ 6350 geteilt durch die lange Kante des Ausschnitts in Zentimetern, höchstens 2400 DPI.
+
+| Lange Kante des Ausschnitts | Renderauflösung | Detailgewinn gegenüber 300 DPI |
+| --------------------------- | --------------- | ------------------------------ |
+| 2 cm | ~2400 DPI | 8fach |
+| 4 cm | ~1600 DPI | 5fach |
+| 6 cm | ~1050 DPI | 3,5fach |
+| 8 cm | ~800 DPI | 2,6fach |
+| 12 cm | ~530 DPI | 1,8fach |
+| 16 cm | ~400 DPI | 1,3fach |
+| 21 cm (volle A4-Breite) | ~300 DPI | keiner |
+
+Diese Staffelung ist möglich, weil die Skalierungsgrenze je **Bild** gilt und nicht je Seite: Ein kleiner Ausschnitt schöpft sie erst bei einer sehr viel höheren Auflösung aus. Genau daraus entsteht der Detailgewinn — nicht aus dem Ausschneiden selbst.
+
+- Führe **höchstens einen** Ausschnitt-Versuch je unlesbarer Stelle durch. Diese Regel ist keine Eskalationsschleife.
+- Nimmt die betroffene Stelle nahezu die volle Seitenbreite ein, bringt ein Ausschnitt nichts, wie die letzte Tabellenzeile zeigt. Klassifiziere sie dann unmittelbar als [UNCLEAR] oder [ILLEGIBLE], ohne Nachprüfung.
+- Rendere auch für die Nachprüfung niemals die ganze Seite erneut.
+
+#### Bildvorverarbeitung
+
+Führe vor der OCR **einen** Vorverarbeitungsdurchgang je gerenderter Seite aus. Wende daraus nur an, was das jeweilige Seitenbild tatsächlich erfordert:
 
 - Graustufen-/Binarisierung,
 - Entzerrung (Deskew),
@@ -142,10 +179,12 @@ Verwende das Ergebnis mit der höheren Zuverlässigkeit. Wenn native Textextrakt
 - Rauschunterdrückung,
 - Kontrast-/Schärfeoptimierung.
 
-Gib die verwendete Auflösung (DPI) und ggf. die Vorverarbeitungsschritte im Qualitätsbericht an.
+Behandle diese Punkte nicht als Abfolge einzeln auszuführender Arbeitsschritte. Seiten ohne Schieflage, Rauschen oder Kontrastprobleme benötigen keine Vorverarbeitung.
 
-Klassifiziere Inhalte erst dann als [UNCLEAR] oder [ILLEGIBLE], nachdem mindestens eine höher aufgelöste Wiederholung versucht wurde. Nenne bei [UNCLEAR] die beste Lesart. Wie diese Klassifikation im Ausgabedokument dargestellt wird, regelt Phase 6 (Abschnitt „Kommentierung handschriftlicher und unsicherer Inhalte").
-Rendering- und OCR-Auflösung sind in die Teilbewertung A (Texterfassung und OCR) einzubeziehen: eine zu niedrige Auflösung senkt diese Teilbewertung.
+Gib die verwendete Auflösung (DPI), die Renderstrategie und ggf. die Vorverarbeitungsschritte im Qualitätsbericht an. Nenne dort außerdem jeden durchgeführten Ausschnitt-Versuch mit der jeweils verwendeten Renderauflösung, damit nachvollziehbar ist, dass der Ausschnitt tatsächlich höher aufgelöst neu gerendert wurde.
+
+Klassifiziere Inhalte erst dann als [UNCLEAR] oder [ILLEGIBLE], nachdem die Ausschnitt-Nachprüfung nach obiger Regel unternommen wurde oder nach jener Regel entfallen durfte. Nenne bei [UNCLEAR] die beste Lesart. Wie diese Klassifikation im Ausgabedokument dargestellt wird, regelt Phase 6 (Abschnitt „Kommentierung handschriftlicher und unsicherer Inhalte").
+Die Angemessenheit der gewählten Renderstrategie ist in die Teilbewertung A (Texterfassung und OCR) einzubeziehen: eine fälschlich unterlassene Rasterung senkt diese Teilbewertung.
 
 #### Extrahiere zunächst vorhandenen maschinenlesbaren Text.
 
@@ -367,17 +406,17 @@ Gib alle Segmente der Herkunft `HANDWRITING` und `SIGNATURE` im Ausgabedokument 
 
 #### Kommentierung handschriftlicher und unsicherer Inhalte
 
-Versieh die folgenden Segmente im DOCX mit einem Word-Kommentar:
+Versieh die folgenden Inhalte im DOCX mit einem Word-Kommentar:
 
-- **jedes** Segment der Herkunft `HANDWRITING` oder `SIGNATURE`, unabhängig von seiner Erkennungssicherheit, und
-- jedes Segment, das als [UNCLEAR] oder [ILLEGIBLE] klassifiziert wurde, auch wenn es nicht handschriftlich ist.
+- **jedes Formularfeld und jeden zusammenhängenden handschriftlichen Block** der Herkunft `HANDWRITING` oder `SIGNATURE`, unabhängig von der Erkennungssicherheit, und
+- jede Stelle, die als [UNCLEAR] oder [ILLEGIBLE] klassifiziert wurde, auch wenn sie nicht handschriftlich ist.
 
 Regeln für das Setzen der Kommentare:
 
-- Verankere den Kommentar exakt an der betroffenen Textstelle, nicht am gesamten Absatz und nicht an der gesamten Tabellenzelle.
-- Verwende als Kommentar-Autor einheitlich `AI Translation` mit den Initialen `AI`, damit die Kommentare in Word gefiltert und ausgewertet werden können.
-- Mehrere unmittelbar benachbarte handschriftliche Segmente, die inhaltlich eine Einheit bilden, z. B. ein mehrzeiliger handschriftlicher Freitext in einem einzelnen Formularfeld, dürfen zu einem einzigen Kommentar zusammengefasst werden. Vermerke die Zusammenfassung im Kommentar.
+- **Granularität:** Ein Kommentar je Formularfeld beziehungsweise je zusammenhängendem handschriftlichem Block — nicht je Einzelsegment. Enthält ein Feld mehrere handschriftliche Werte oder einen mehrzeiligen Freitext, werden diese in **einem** Kommentar aufgeführt.
 - Fasse nicht über Feldgrenzen hinweg zusammen. Getrennte Formularfelder erhalten getrennte Kommentare.
+- Verankere den Kommentar an der betroffenen Stelle, nicht am gesamten Absatz und nicht an der gesamten Tabellenzelle. Umfasst der Kommentar ein ganzes Feld, ist der Feldwert der Anker.
+- Verwende als Kommentar-Autor einheitlich `AI Translation` mit den Initialen `AI`, damit die Kommentare in Word gefiltert und ausgewertet werden können.
 
 ##### Darstellung von [UNCLEAR] und [ILLEGIBLE] im Fließtext
 
@@ -402,7 +441,7 @@ Für unsicher erkannte Inhalte:
 [UNCLEAR] — Source: handwriting | Recognition confidence: low
 Best reading (original language): "Chargennr. 4B7?2"
 Alternative readings: "4B712" | "4B7I2"
-Reason: overlapping ink, low contrast; 600 DPI retry performed
+Reason: overlapping ink, low contrast; cropped region re-rendered at 1050 DPI
 Recommended check: verify against original p. 3, field "Charge"
 ```
 
@@ -410,7 +449,7 @@ Für nicht lesbare Inhalte:
 
 ```text
 [ILLEGIBLE] — Source: handwriting
-Reason: ink smeared, no reading possible at 600 DPI
+Reason: ink smeared, no reading possible on the cropped region re-rendered at 1600 DPI
 Recommended check: verify against original p. 5, signature block
 ```
 
@@ -426,8 +465,8 @@ Word-Kommentare sind nicht in jeder Werkzeugkette verfügbar. Gehe in dieser Rei
 
 Umfang je Stufe:
 
-- In **Stufe 1** wird jedes handschriftliche Segment kommentiert, wie oben vorgeschrieben.
-- In **Stufe 2 und 3** werden nur noch Segmente mit der Erkennungssicherheit `MEDIUM` oder `LOW` sowie alle [UNCLEAR]- und [ILLEGIBLE]-Stellen vermerkt. Sicher erkannte Handschrift bleibt allein durch die blaue Farbe gekennzeichnet, da Fußnoten und Inline-Marker sonst das Layout unlesbar machen würden. Vermerke diese Einschränkung im Qualitätsbericht.
+- In **Stufe 1** wird jedes handschriftliche Formularfeld beziehungsweise jeder handschriftliche Block kommentiert, wie oben vorgeschrieben.
+- In **Stufe 2 und 3** werden nur noch Stellen mit der Erkennungssicherheit `MEDIUM` oder `LOW` sowie alle [UNCLEAR]- und [ILLEGIBLE]-Stellen vermerkt. Sicher erkannte Handschrift bleibt allein durch die blaue Farbe gekennzeichnet, da Fußnoten und Inline-Marker sonst das Layout unlesbar machen würden. Vermerke diese Einschränkung im Qualitätsbericht.
 
 Nenne die tatsächlich verwendete Stufe im Qualitätsbericht unter „Einschränkungen". Greift Stufe 2 oder 3, ist das ein gültiges Ergebnis und kein Fehler, sofern es dokumentiert wurde. Die farbliche Kennzeichnung ist in allen Stufen unverändert und vollständig vorzunehmen.
 
@@ -464,8 +503,8 @@ Prüfe mindestens:
 - nicht eindeutig rekonstruierte Inhalte,
 - vollständige Einfärbung aller Segmente der Herkunft `HANDWRITING` und `SIGNATURE` in #1F3FA8,
 - keine fälschlich eingefärbten gedruckten, nativen oder gestempelten Segmente,
-- je handschriftlichem Segment genau ein Kommentar beziehungsweise eine im Kommentar dokumentierte Zusammenfassung mehrerer Segmente,
-- je als [UNCLEAR] oder [ILLEGIBLE] klassifiziertem Segment genau ein Kommentar.
+- je handschriftlichem Formularfeld beziehungsweise Block genau ein Kommentar,
+- je als [UNCLEAR] oder [ILLEGIBLE] klassifizierter Stelle genau ein Kommentar.
 
 Führe einen Rückvergleich durch:
 
@@ -473,7 +512,7 @@ Führe einen Rückvergleich durch:
 - Prüfe, ob alle Aussagen enthalten sind.
 - Prüfe, ob durch die Übersetzung Bedeutungen hinzugefügt, entfernt oder verändert wurden.
 - Korrigiere alle eindeutig festgestellten Fehler.
-- Prüfe das korrigierte Dokument erneut.
+- Prüfe anschließend **nur die korrigierten Stellen** erneut. Ein vollständiger zweiter Durchgang über das gesamte Dokument ist nur erforderlich, wenn strukturelle Fehler festgestellt wurden, etwa fehlende Seiten, vertauschte Abschnitte oder verschobene Tabellen.
 
 ### PHASE 8: CONFIDENCE INDEX
 
@@ -607,9 +646,9 @@ Diese Werte sind die verbindliche Datenquelle für die Tabelle „Trustworthines
 Verifiziere vor der Fertigstellung ausdrücklich:
 
 - dass die programmatisch ermittelte Seitenzahl mit der verarbeiteten Seitenzahl übereinstimmt,
-- dass jede Seite als hochauflösendes Bild (≥ 300 DPI) verarbeitet wurde,
+- dass jede Seite, die nach den Regeln der Phase 2 zu rendern war, als Rasterbild mit 300 DPI verarbeitet wurde,
 - dass die Seitenanzahl im Qualitätsbericht mit der ermittelten Seitenzahl übereinstimmt, und
-- dass jedes handschriftliche Segment sowohl eingefärbt als auch kommentiert wurde.
+- dass jedes handschriftliche Segment eingefärbt und jedes handschriftliche Feld kommentiert wurde.
 
 Seiten ohne erkennbare Probleme können zusammengefasst werden. Problematische Seiten müssen einzeln aufgeführt werden.
 
@@ -667,18 +706,35 @@ Einschränkungen Beschreibe transparent, welche Prüfungen technisch nicht durch
 Prüfe vor der Fertigstellung:
 
 - Die Summe der je Seite gezählten Kommentare muss der im Abschlussbericht genannten Gesamtzahl gesetzter Kommentare entsprechen.
-- Jedes als [UNCLEAR] oder [ILLEGIBLE] klassifizierte Segment muss sowohl einen Kommentar als auch einen Eintrag unter „Manuell zu prüfende Stellen" besitzen.
+- Jede als [UNCLEAR] oder [ILLEGIBLE] klassifizierte Stelle muss sowohl einen Kommentar als auch einen Eintrag unter „Manuell zu prüfende Stellen" besitzen.
 - Jedes Segment der Herkunft `HANDWRITING` oder `SIGNATURE` muss im Ausgabedokument in #1F3FA8 eingefärbt sein.
 - Die Markdown-Fassung muss inhaltlich mit dem Übersetzungsdokument übereinstimmen. Gleiche dazu Überschriften, Anzahl der Tabellen sowie alle Zahlen, Datumsangaben und Identifikatoren ab.
 - Jedes im Übersetzungsdokument in #1F3FA8 eingefärbte Segment muss in der Markdown-Fassung als `[HW]…[/HW]` erscheinen. Die Anzahl muss der im Abschlussbericht genannten Gesamtzahl handschriftlicher Segmente entsprechen.
 - Die Markdown-Fassung darf keine Bestandteile der Präambelseite enthalten.
 - Die Tabelle „Trustworthiness" auf der Präambelseite muss genau N Seitenzeilen zuzüglich der Gesamtzeile enthalten, wobei N der programmatisch ermittelten Seitenzahl entspricht.
 - Jeder Wert in dieser Tabelle muss mit der seitenbezogenen Bewertung aus Phase 9 übereinstimmen, die Gesamtzeile mit dem Confidence Index aus Phase 8.
-- In Stufe 1 der Rückfallkaskade muss jedes handschriftliche Segment kommentiert sein. Wurde Stufe 2 oder 3 verwendet, genügt die Kommentierung der unsicheren Stellen; der reduzierte Umfang muss dann unter „Einschränkungen" dokumentiert sein.
+- In Stufe 1 der Rückfallkaskade muss jedes handschriftliche Formularfeld beziehungsweise jeder handschriftliche Block kommentiert sein. Wurde Stufe 2 oder 3 verwendet, genügt die Kommentierung der unsicheren Stellen; der reduzierte Umfang muss dann unter „Einschränkungen" dokumentiert sein.
 
 Wenn eine dieser Prüfungen nicht aufgeht, gilt die Aufgabe als unvollständig und muss korrigiert werden.
 
 # AUSGABEDATEIEN
+
+## Reihenfolge und Vorgehen bei knappem Arbeitsbudget
+
+Erzeuge die Ausgabedateien in genau dieser Reihenfolge:
+
+1. **%Original Name%_Translated by AI.docx** — das Übersetzungsdokument einschließlich Präambelseite,
+2. **%Original Name%_Translated by AI.md** — die Markdown-Fassung,
+3. **%Original Name%_AI Translation Quality Report.docx** — der Qualitätsbericht,
+4. **%Original Name%_AI Translation Used Terminology.csv** — die Terminologieliste.
+
+Regeln:
+
+- Stelle jede Datei **vollständig fertig und speichere sie**, bevor du mit der nächsten beginnst. Beginne nicht mehrere Dateien parallel.
+- Schreibe die Präambelseite beim Erzeugen des DOCX unmittelbar als erste Seite mit. Öffne das fertige Dokument nicht erneut, um die Präambel nachträglich voranzustellen.
+- Wenn absehbar ist, dass das verfügbare Arbeitsbudget nicht für alle Dateien reicht: Schließe die gerade begonnene Datei ab, beende die Verarbeitung geordnet und nenne ausdrücklich, welche Dateien fehlen und warum. Brich nicht stillschweigend ab und beginne keine Datei, die du nicht abschließen kannst.
+- Der Qualitätsbericht darf in diesem Fall verkürzt ausfallen. Er muss dann jedoch die fehlenden Dateien und den Grund benennen.
+- Ein dokumentierter Teilabschluss ist einem Abbruch mitten in der Verarbeitung vorzuziehen.
 
 ## Übersetzung
 
@@ -792,7 +848,7 @@ Erstelle eine Terminologieliste und benenne diese wie folgt:
 
 Erzeuge ein oder zwei Prämbel Seite(n):
 
-- Erzeuge eine Präamble Seite und füge diese als 0. Seite dem Übersetzungsdokument (%Original Name%_Translated by AI.docx) vorne an
+- Die Präambelseite ist die erste Seite des Übersetzungsdokuments (%Original Name%_Translated by AI.docx). Schreibe sie beim Erzeugen des Dokuments unmittelbar als erste Seite mit, bevor der übersetzte Inhalt folgt. Stelle sie nicht nachträglich voran.
 - Die Präambelseite enthält als erstes nachfolgende Absatz. Die Schriftfarbe ist grau.
   "AI-Generated Translation Disclaimer
   This document has been translated into English using a fully automated Artificial Intelligence (AI)-based translation process.
@@ -831,6 +887,7 @@ Erzeuge ein oder zwei Prämbel Seite(n):
 * Beginne direkt mit der Analyse der beigefügten PDF-Datei.
 * Stelle keine Rückfragen, sofern die Aufgabe mit den vorhandenen Angaben sinnvoll bearbeitet werden kann.
 * Falls eine technische Funktion nicht verfügbar ist, dokumentiere die Einschränkung transparent und führe alle übrigen Arbeitsschritte dennoch vollständig aus.
+* Reicht das verfügbare Arbeitsbudget absehbar nicht für den gesamten Auftrag, gilt die Prioritätsreihenfolge aus dem Abschnitt „Reihenfolge und Vorgehen bei knappem Arbeitsbudget". Ein dokumentierter Teilabschluss mit vollständigen Einzeldateien ist einem Abbruch mitten in der Verarbeitung vorzuziehen.
 * Gib keine hohe Confidence-Bewertung allein aufgrund guter sprachlicher Formulierungen. OCR-Qualität, Vollständigkeit, fachliche Genauigkeit und Layouttreue müssen separat berücksichtigt werden.
 
 ## Data Privacy
@@ -844,15 +901,16 @@ Stelle Data Privacy sicher, indem Du:
 
 ## Ignore this chapter
 
-$prompt_file_version: 0.4
+$prompt_file_version: 0.5
 
 $prompt_file_name: translate_file_into_en.md
 
 $author: stefan.neuhaus@bayer.com
 
-| version | author | comment                                                                                                         |
-| ------- | ------ | --------------------------------------------------------------------------------------------------------------- |
-| 0.1     | imnes  | initial                                                                                                         |
-| 0.2     | imnes  | Handschrift/Unterschriften blau (#1F3FA8), Word-Kommentare, Herkunftsklassifikation                             |
-| 0.3     | imnes  | Abschnitt Trustworthiness auf Praeambelseite: Confidence je Seite + Gesamtwert, Fussnote auf Qualitaetsbericht  |
-| 0.4     | imnes  | Zusaetzliche Ausgabedatei: Markdown-Fassung der Uebersetzung ohne Praeambel, mit Frontmatter und Inline-Markern |
+| version | author | comment                                                                                                                                                                                 |
+| ------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0.1     | imnes  | initial                                                                                                                                                                                 |
+| 0.2     | imnes  | Handschrift/Unterschriften blau (#1F3FA8), Word-Kommentare, Herkunftsklassifikation                                                                                                     |
+| 0.3     | imnes  | Abschnitt Trustworthiness auf Praeambelseite: Confidence je Seite + Gesamtwert, Fussnote auf Qualitaetsbericht                                                                          |
+| 0.4     | imnes  | Zusaetzliche Ausgabedatei: Markdown-Fassung der Uebersetzung ohne Praeambel, mit Frontmatter und Inline-Markern                                                                         |
+| 0.5     | imnes  | Schrittbudget gesenkt: bedarfsabhaengiges Rendering, 300 DPI ohne Eskalation, Ausschnitte neu und hoeher aufgeloest gerendert, Kommentare je Feld, Ausgabereihenfolge mit Teilabschluss |
