@@ -47,6 +47,9 @@ Falls das gewünschte Ausgabeformat technisch nicht erstellt werden kann:
 - Gib das Dokument als strukturiertes HTML aus.Verwende semantische HTML-Elemente und CSS für die Layoutrekonstruktion.
 - Stelle sicher, dass sich das HTML anschließend möglichst verlustarm in DOCX oder PDF konvertieren lässt.
 - Gib nicht nur den übersetzten Text im Chat aus, wenn eine Datei erzeugt werden kann.
+- Bilde die Kennzeichnung handschriftlicher Inhalte (siehe Phase 6) auch im HTML ab, damit sie die Konvertierung nach DOCX übersteht:
+  - Handschrift und Unterschriften: `<span class="handwritten" style="color:#1F3FA8">…</span>` — die Farbe ist zusätzlich als Inline-Style zu setzen, da reine CSS-Klassen bei der Konvertierung häufig verloren gehen.
+  - Kommentare: HTML kennt keine Word-Kommentare. Gib den Kommentarinhalt sowohl als `title`-Attribut am betroffenen `<span>` als auch als sichtbare Fußnote am Seitenende aus.
 
 ## GRUNDREGELN
 
@@ -138,8 +141,8 @@ Verwende das Ergebnis mit der höheren Zuverlässigkeit. Wenn native Textextrakt
 
 Gib die verwendete Auflösung (DPI) und ggf. die Vorverarbeitungsschritte im Qualitätsbericht an.
 
-Markiere Inhalte erst dann als [UNCLEAR] oder [ILLEGIBLE], nachdem mindestens eine höher aufgelöste Wiederholung versucht wurde. Nenne bei [UNCLEAR] die beste Lesart.
-Rendering- und OCR-Auflösung sind in die Teilbewertung A (Texterfassung und OCR) einzubeziehen: eine zu niedrige Auflససung senkt diese Teilbewertung.
+Klassifiziere Inhalte erst dann als [UNCLEAR] oder [ILLEGIBLE], nachdem mindestens eine höher aufgelöste Wiederholung versucht wurde. Nenne bei [UNCLEAR] die beste Lesart. Wie diese Klassifikation im Ausgabedokument dargestellt wird, regelt Phase 6 (Abschnitt „Kommentierung handschriftlicher und unsicherer Inhalte").
+Rendering- und OCR-Auflösung sind in die Teilbewertung A (Texterfassung und OCR) einzubeziehen: eine zu niedrige Auflösung senkt diese Teilbewertung.
 
 #### Extrahiere zunächst vorhandenen maschinenlesbaren Text.
 
@@ -187,16 +190,36 @@ Prüfe OCR-Ergebnisse auf typische Fehler, insbesondere:
 - fehlerhaft erkannte Eigennamen.
 
 Übernimm unleserliche Inhalte nicht als vermeintlich sicheren Text.
-Verwende bei nicht zuverlässig lesbaren Inhalten folgende Kennzeichnung: [UNCLEAR: vermutlich erkannter Inhalt]
-Ist keine sinnvolle Erkennung möglich, verwende: [ILLEGIBLE]
 
-Halte intern für jeden Textabschnitt fest, ob er aus:
+Kennzeichne nicht zuverlässig lesbare Inhalte wie folgt:
 
-- nativem PDF-Text,
-- OCR,
-- Bildtext,
-- Handschrift oder
-- einer unsicheren Erkennung stammt.
+- **[UNCLEAR]**, wenn eine plausible Lesart existiert, diese aber nicht gesichert ist. Halte die beste Lesart und, soweit vorhanden, alternative Lesarten fest.
+- **[ILLEGIBLE]**, wenn keine sinnvolle Erkennung möglich ist.
+
+Diese Kennzeichnung ist zunächst eine **Klassifikation des Segments**, keine Textausgabe. Wie sie im Ausgabedokument sichtbar wird, regelt ausschließlich Phase 6.
+
+#### Herkunftsklassifikation (verbindlich)
+
+Ordne jedem Textsegment verbindlich zwei Attribute zu und erhalte diese Zuordnung bis zur Erzeugung des Ausgabedokuments:
+
+**Herkunft** — genau einer der folgenden Werte:
+
+- `NATIVE` — maschinenlesbarer PDF-Text,
+- `OCR_PRINT` — per OCR aus gedrucktem Text erkannt,
+- `IMAGE_TEXT` — Text innerhalb einer Grafik oder eines Diagramms,
+- `HANDWRITING` — handschriftlich geschriebener Inhalt,
+- `SIGNATURE` — Unterschrift,
+- `STAMP` — Stempelinhalt.
+
+**Erkennungssicherheit** — genau einer der folgenden Werte:
+
+- `HIGH` — gesichert erkannt,
+- `MEDIUM` — überwiegend sicher, einzelne Zeichen unsicher,
+- `LOW` — unsicher; entspricht einer Klassifikation als [UNCLEAR] oder [ILLEGIBLE].
+
+Als Segment gilt die kleinste sinnvolle zusammenhängende Einheit, also z. B. ein einzelner handschriftlich ausgefüllter Formularwert, nicht die gesamte Zeile oder Tabellenzelle.
+
+Diese Klassifikation ist die verbindliche Grundlage für die farbliche Kennzeichnung und die Kommentierung in Phase 6 sowie für die Zählungen in den Phasen 9 und 10. Sie darf nicht verworfen werden, nachdem die Übersetzung erstellt wurde.
 
 ### PHASE 3: STRUKTURIERUNG DES AUSGABEFORMATS
 
@@ -327,6 +350,84 @@ Erhalte oder rekonstruiere insbesondere:
 - Wenn Text in einem Bild nicht direkt ersetzt werden kann, füge die englische Übersetzung unmittelbar unter dem Bild oder in einer eindeutig zugeordneten Textbox ein.
 - Kennzeichne diese Lösung im Qualitätsbericht.
 
+#### Farbliche Kennzeichnung handschriftlicher Inhalte
+
+Gib alle Segmente der Herkunft `HANDWRITING` und `SIGNATURE` im Ausgabedokument in blauer Schriftfarbe aus, so als wären sie mit einem Kugelschreiber geschrieben worden.
+
+- Verbindlicher Farbwert: **#1F3FA8** (RGB 31, 63, 168). Wähle keinen abweichenden Blauton.
+- Segmente der Herkunft `NATIVE`, `OCR_PRINT`, `IMAGE_TEXT` und `STAMP` behalten ihre Originalfarbe. Stempel werden **nicht** eingefärbt.
+- Geändert wird ausschließlich die Schriftfarbe. Schriftart, Schriftgröße, Fettdruck, Kursivschrift, Unterstreichung, Position und Absatzformat bleiben so, wie es die Layoutrekonstruktion vorsieht.
+- Die Regel gilt im gesamten Dokument, insbesondere auch in Tabellenzellen, Formularfeldern, Ankreuzfeldern, Marginalien, Kopf- und Fußzeilen, Bildunterschriften sowie in unter Bildern platzierten Übersetzungen.
+- Färbe die kleinste sinnvolle Einheit ein: Ein einzelner handschriftlich ausgefüllter Feldwert wird blau, nicht die gesamte Zeile und nicht die gesamte Tabellenzelle. Die gedruckte Feldbeschriftung bleibt schwarz.
+- Die Einfärbung ist unabhängig von der Erkennungssicherheit und auch dann vorzunehmen, wenn das Segment als [UNCLEAR] oder [ILLEGIBLE] klassifiziert wurde.
+- Die Einfärbung ist verbindlich und von der technischen Rückfallkaskade für Kommentare nicht betroffen.
+
+#### Kommentierung handschriftlicher und unsicherer Inhalte
+
+Versieh die folgenden Segmente im DOCX mit einem Word-Kommentar:
+
+- **jedes** Segment der Herkunft `HANDWRITING` oder `SIGNATURE`, unabhängig von seiner Erkennungssicherheit, und
+- jedes Segment, das als [UNCLEAR] oder [ILLEGIBLE] klassifiziert wurde, auch wenn es nicht handschriftlich ist.
+
+Regeln für das Setzen der Kommentare:
+
+- Verankere den Kommentar exakt an der betroffenen Textstelle, nicht am gesamten Absatz und nicht an der gesamten Tabellenzelle.
+- Verwende als Kommentar-Autor einheitlich `AI Translation` mit den Initialen `AI`, damit die Kommentare in Word gefiltert und ausgewertet werden können.
+- Mehrere unmittelbar benachbarte handschriftliche Segmente, die inhaltlich eine Einheit bilden, z. B. ein mehrzeiliger handschriftlicher Freitext in einem einzelnen Formularfeld, dürfen zu einem einzigen Kommentar zusammengefasst werden. Vermerke die Zusammenfassung im Kommentar.
+- Fasse nicht über Feldgrenzen hinweg zusammen. Getrennte Formularfelder erhalten getrennte Kommentare.
+
+##### Darstellung von [UNCLEAR] und [ILLEGIBLE] im Fließtext
+
+- **[UNCLEAR]:** Gib die beste Lesart als normalen übersetzten Text aus, bei handschriftlicher Herkunft in #1F3FA8. Der Marker `[UNCLEAR]` selbst erscheint **nicht** im Fließtext. Die gesamte Unsicherheit, also beste Lesart im Original, alternative Lesarten und Ursache, wird ausschließlich im Word-Kommentar dokumentiert.
+- **[ILLEGIBLE]:** Der Marker `[ILLEGIBLE]` bleibt im Fließtext sichtbar, da sonst kein Text existiert, an dem ein Kommentar verankert werden könnte. Zusätzlich wird ein Word-Kommentar gesetzt.
+
+##### Verbindliche Kommentarvorlagen
+
+Verwende die folgenden Feldnamen unverändert, damit die Kommentare für den Abschlussbericht maschinell auswertbar bleiben. Verfasse die Kommentare auf Englisch.
+
+Für sicher erkannte Handschrift:
+
+```text
+[HANDWRITING] — Confidence: high
+Source text (original language): "Chargennr. 4B712"
+Translation: "Lot no. 4B712"
+```
+
+Für unsicher erkannte Inhalte:
+
+```text
+[UNCLEAR] — Source: handwriting | Recognition confidence: low
+Best reading (original language): "Chargennr. 4B7?2"
+Alternative readings: "4B712" | "4B7I2"
+Reason: overlapping ink, low contrast; 600 DPI retry performed
+Recommended check: verify against original p. 3, field "Charge"
+```
+
+Für nicht lesbare Inhalte:
+
+```text
+[ILLEGIBLE] — Source: handwriting
+Reason: ink smeared, no reading possible at 600 DPI
+Recommended check: verify against original p. 5, signature block
+```
+
+Für Unterschriften gilt dieselbe Vorlage mit `[SIGNATURE]` als Kennung.
+
+##### Technische Rückfallkaskade
+
+Word-Kommentare sind nicht in jeder Werkzeugkette verfügbar. Gehe in dieser Reihenfolge vor und verwende die erste technisch umsetzbare Stufe:
+
+1. **Word-Kommentar** — der Sollzustand.
+2. **Fußnote oder Endnote** mit identischem Inhalt nach obiger Vorlage.
+3. **Inline-Marker** in eckigen Klammern unmittelbar hinter der betroffenen Stelle. Nur in dieser Stufe erscheint `[UNCLEAR: beste Lesart]` wieder im Fließtext.
+
+Umfang je Stufe:
+
+- In **Stufe 1** wird jedes handschriftliche Segment kommentiert, wie oben vorgeschrieben.
+- In **Stufe 2 und 3** werden nur noch Segmente mit der Erkennungssicherheit `MEDIUM` oder `LOW` sowie alle [UNCLEAR]- und [ILLEGIBLE]-Stellen vermerkt. Sicher erkannte Handschrift bleibt allein durch die blaue Farbe gekennzeichnet, da Fußnoten und Inline-Marker sonst das Layout unlesbar machen würden. Vermerke diese Einschränkung im Qualitätsbericht.
+
+Nenne die tatsächlich verwendete Stufe im Qualitätsbericht unter „Einschränkungen". Greift Stufe 2 oder 3, ist das ein gültiges Ergebnis und kein Fehler, sofern es dokumentiert wurde. Die farbliche Kennzeichnung ist in allen Stufen unverändert und vollständig vorzunehmen.
+
 ### PHASE 7: INHALTLICHE QUALITÄTSPRÜFUNG
 
 Vergleiche das übersetzte Dokument systematisch mit dem Ausgangsdokument.
@@ -357,7 +458,11 @@ Prüfe mindestens:
 - nicht übersetzte Textreste,
 - OCR-Artefakte,
 - unleserliche Stellen,
-- nicht eindeutig rekonstruierte Inhalte.
+- nicht eindeutig rekonstruierte Inhalte,
+- vollständige Einfärbung aller Segmente der Herkunft `HANDWRITING` und `SIGNATURE` in #1F3FA8,
+- keine fälschlich eingefärbten gedruckten, nativen oder gestempelten Segmente,
+- je handschriftlichem Segment genau ein Kommentar beziehungsweise eine im Kommentar dokumentierte Zusammenfassung mehrerer Segmente,
+- je als [UNCLEAR] oder [ILLEGIBLE] klassifiziertem Segment genau ein Kommentar.
 
 Führe einen Rückvergleich durch:
 
@@ -454,7 +559,7 @@ Wende zusätzlich folgende Begrenzungsregeln an:
 - Wenn vollständige Seiten fehlen oder nicht verarbeitet werden konnten, darf der Gesamtwert nicht über 50 % liegen.
 - Wenn fachlich relevante Textpassagen unleserlich sind, darf der Gesamtwert nicht über 75 % liegen.
 - Wenn Zahlen, Einheiten, Dokumentnummern oder Tabelleninhalte nicht zuverlässig geprüft werden konnten, darf der Gesamtwert nicht über 50 % liegen.
-- Wenn mehr als nur vereinzelte Textstellen mit [UNCLEAR] oder [ILLEGIBLE] gekennzeichnet sind, darf der Gesamtwert nicht über 50 % liegen.
+- Wenn mehr als nur vereinzelte Textstellen als [UNCLEAR] oder [ILLEGIBLE] klassifiziert und entsprechend kommentiert wurden, darf der Gesamtwert nicht über 50 % liegen.
 - Wenn keine systematische Vollständigkeitsprüfung möglich war, darf der Gesamtwert nicht über 70 % liegen.
 - Wenn eine zuverlässige Prüfung der Übersetzung gegen den Ausgangstext nicht möglich war, darf der Gesamtwert nicht über 75 % liegen.
 
@@ -478,14 +583,17 @@ Erstelle zusätzlich für jede Seite eine kompakte Bewertung mit:
 - OCR-Confidence in Prozent,
 - Übersetzungs-Confidence in Prozent,
 - Layout-Confidence in Prozent,
+- Anzahl handschriftlicher Segmente (Herkunft `HANDWRITING` oder `SIGNATURE`),
+- Anzahl gesetzter Kommentare,
 - erkannte Problemstellen,
 - empfohlene manuelle Prüfung.
 
 Verifiziere vor der Fertigstellung ausdrücklich:
 
 - dass die programmatisch ermittelte Seitenzahl mit der verarbeiteten Seitenzahl übereinstimmt,
-- dass jede Seite als hochauflösendes Bild (≥ 300 DPI) verarbeitet wurde, und
-- dass die Seitenanzahl im Qualitätsbericht mit der ermittelten Seitenzahl übereinstimmt.
+- dass jede Seite als hochauflösendes Bild (≥ 300 DPI) verarbeitet wurde,
+- dass die Seitenanzahl im Qualitätsbericht mit der ermittelten Seitenzahl übereinstimmt, und
+- dass jedes handschriftliche Segment sowohl eingefärbt als auch kommentiert wurde.
 
 Seiten ohne erkennbare Probleme können zusammengefasst werden. Problematische Seiten müssen einzeln aufgeführt werden.
 
@@ -500,6 +608,9 @@ erzeugtes Ausgabeformat,
 Anzahl verarbeiteter Seiten,
 Anzahl vollständig verarbeiteter Seiten,
 Anzahl problematischer Seiten,
+Gesamtzahl handschriftlicher Segmente (Herkunft `HANDWRITING` oder `SIGNATURE`),
+Gesamtzahl gesetzter Kommentare,
+verwendete Darstellungsstufe der Rückfallkaskade (Word-Kommentar, Fußnote oder Inline-Marker),
 verwendete Sprachvariante.
 Confidence Index
 Gesamtwert in Prozent,
@@ -523,12 +634,24 @@ Layoutabweichungen.
 Manuell zu prüfende Stellen Führe jede Stelle mit folgenden Angaben auf:
 Seite,
 Position oder Abschnitt,
+Herkunft (Handschrift, Unterschrift, Stempel, Bildtext oder OCR),
 Ausgangstext, soweit lesbar,
 englische Übersetzung,
 Art der Unsicherheit,
 empfohlene Prüfung.
 Nicht übersetzte Inhalte Liste alle bewusst nicht übersetzten Inhalte mit Begründung auf.
-Einschränkungen Beschreibe transparent, welche Prüfungen technisch nicht durchgeführt werden konnten.
+Einschränkungen Beschreibe transparent, welche Prüfungen technisch nicht durchgeführt werden konnten. Nenne hier ausdrücklich, falls Word-Kommentare technisch nicht gesetzt werden konnten und stattdessen Stufe 2 oder 3 der Rückfallkaskade verwendet wurde.
+
+#### Konsistenzabgleich der Kennzeichnungen (verbindlich)
+
+Prüfe vor der Fertigstellung:
+
+- Die Summe der je Seite gezählten Kommentare muss der im Abschlussbericht genannten Gesamtzahl gesetzter Kommentare entsprechen.
+- Jedes als [UNCLEAR] oder [ILLEGIBLE] klassifizierte Segment muss sowohl einen Kommentar als auch einen Eintrag unter „Manuell zu prüfende Stellen" besitzen.
+- Jedes Segment der Herkunft `HANDWRITING` oder `SIGNATURE` muss im Ausgabedokument in #1F3FA8 eingefärbt sein.
+- In Stufe 1 der Rückfallkaskade muss jedes handschriftliche Segment kommentiert sein. Wurde Stufe 2 oder 3 verwendet, genügt die Kommentierung der unsicheren Stellen; der reduzierte Umfang muss dann unter „Einschränkungen" dokumentiert sein.
+
+Wenn eine dieser Prüfungen nicht aufgeht, gilt die Aufgabe als unvollständig und muss korrigiert werden.
 
 # AUSGABEDATEIEN
 
@@ -540,7 +663,8 @@ Erzeuge das eigentliche Übersetzungsdokument und benenne dieses wie folgt:
 - benenenne diese Datei wie folgt:
   - %Original Name%_Translated by AI.docx oder
   - %Original Name%_Translated by AI.html
-- Das Übersetzungsodokument enthält nur Inhalte die im Originalen ebenfalls vorzufinden sind. Es darf z.B. keine spezifische Kopf- oder Fußleiste oder sonstige Markierung hinzugefügt werden.
+- Das Übersetzungsodokument enthält nur Inhalte die im Originalen ebenfalls vorzufinden sind. Es darf z.B. keine spezifische Kopf- oder Fußleiste, kein Wasserzeichen und keine sonstige inhaltliche Markierung hinzugefügt werden.
+- Ausgenommen von dieser Regel sind ausdrücklich die in Phase 6 vorgeschriebenen Prüfhilfen: die blaue Einfärbung handschriftlicher Inhalte (#1F3FA8) und die Word-Kommentare. Diese gelten nicht als inhaltliche Ergänzung, da sie keinen Text hinzufügen, sondern die Herkunft und Erkennungssicherheit des vorhandenen Textes kenntlich machen. Sie sind verbindlich zu setzen.
 
 ## Qualitätsbericht
 
@@ -569,9 +693,13 @@ Erzeuge ein oder zwei Prämbel Seite(n):
   AI Model: $(your_name_as_your_inventor_named_you)
   Prompt File: $(prompt_file_name)
   Prompt File Version: $(prompt_file_version)"
-- 
-
-* Translator's note: Source document is in French. Target: American English. This is a reconstructed, translated rendering of a scanned, partly handwritten form. Handwritten / low-quality entries are marked [UNCLEAR: ...] or [ILLEGIBLE]. Logos/images could not be reproduced and are indicated by [IMAGE].]
+- Die Präambelseite enthält anschließend folgenden Legenden-Absatz, ebenfalls in grauer Schriftfarbe:
+  "Legend
+  Text displayed in blue was transcribed from handwritten source content, including signatures. Printed, machine-readable and stamped content is shown in its original color.
+  Word comments provide, for each handwritten passage, the source text and the recognition confidence. Where recognition was uncertain or impossible, the comment is marked [UNCLEAR] or [ILLEGIBLE] and additionally states the nature of the problem and the recommended verification.
+  Passages marked [ILLEGIBLE] could not be read at all. All commented passages are also listed in the accompanying quality report."
+- Die Präambelseite enthält abschließend folgenden Hinweis, ebenfalls in grauer Schriftfarbe. Setze die in geschweiften Klammern angegebenen Werte aus dem tatsächlich verarbeiteten Dokument ein und lasse nicht zutreffende Sätze weg:
+  "Translator's note: Source document is in {Ausgangssprache}. Target: {verwendete englische Sprachvariante}. This is a reconstructed, translated rendering of the source document{, which is a scanned and partly handwritten form — sofern zutreffend}. Images that could not be reproduced are indicated by [IMAGE]."
 
 # ABSCHLIESSENDE ANWEISUNG
 
@@ -591,12 +719,13 @@ Stelle Data Privacy sicher, indem Du:
 
 ## Ignore this chapter
 
-$prompt_file_version: 0.1
+$prompt_file_version: 0.2
 
 $prompt_file_name: translate_file_into_en.md
 
 $author: stefan.neuhaus@bayer.com
 
-| version | author | comment |
-| ------- | ------ | ------- |
-| 0.1     | imnes  | initial |
+| version | author | comment                                                                             |
+| ------- | ------ | ----------------------------------------------------------------------------------- |
+| 0.1     | imnes  | initial                                                                             |
+| 0.2     | imnes  | Handschrift/Unterschriften blau (#1F3FA8), Word-Kommentare, Herkunftsklassifikation |
