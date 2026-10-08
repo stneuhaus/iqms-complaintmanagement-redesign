@@ -6,6 +6,7 @@ from __future__ import annotations
 import re
 import sys
 from pathlib import Path
+from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
@@ -42,7 +43,8 @@ def main() -> int:
             file_part = url.split("#", 1)[0]
             if not file_part:
                 continue
-            target = (path.parent / file_part).resolve()
+            # Markdown links percent-encode spaces; decode before hitting the filesystem.
+            target = (path.parent / unquote(file_part)).resolve()
             if not target.exists():
                 rel = path.relative_to(ROOT).as_posix()
                 broken.append(f"{rel} -> {url}")

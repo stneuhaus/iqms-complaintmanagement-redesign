@@ -1,0 +1,7 @@
+﻿source term,English translation,occurrences,locations,variants,preferred decision
+Objet,Subject,3,"p. 1: title, Object ID, Subject",None,Email context.
+Réclamation,Complaint,3,"p. 1: title, Object ID, Subject",Claim,Complaint about damaged goods.
+produit endommagé (including truncated forms),damaged product (truncation preserved),3,"p. 1: title, Object ID, Subject",Damaged item,Product in subject; item in body.
+Recharge,refill,1,p. 1: Subject,Replacement cartridge,Refill; no unsupported product interpretation.
+un article reçu abimé,one item was received damaged,1,p. 1: email body,None,Preserve singular quantity and damage on receipt.
+BL,BL,1,p. 1: email body,Not expanded,Source does not define abbreviation.

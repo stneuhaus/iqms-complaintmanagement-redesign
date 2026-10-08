@@ -138,6 +138,7 @@ files_written: 001_Translated by AI.docx
 
 - `run_state`: `INCOMPLETE`, solange Etappen offen sind. `COMPLETE` nur dann, wenn alle fünf Etappen abgeschlossen **und** alle vier Ausgabedateien vollständig geschrieben sind. Setze bei `COMPLETE` zusätzlich `next_stage: NONE`.
 - `files_written`: die bereits vollständig gespeicherten Ausgabedateien, mit Komma getrennt.
+- `blocked_step`: nur anzugeben, wenn ein Arbeitsschritt nach fünf Versuchen an einem Werkzeugfehler gescheitert ist. Beschreibe den Schritt kurz. Fehlt die Zeile, lag kein solcher Fall vor.
 - Gib den Block immer **vollständig** aus. Ein abgeschnittener Block ist für das aufrufende System unbrauchbar.
 
 #### State-Block
@@ -974,33 +975,39 @@ Dieser Abschnitt gilt, wenn der Aufruf einen Verarbeitungszustand mitbringt oder
 
 * Beginne direkt mit der Analyse der beigefügten PDF-Datei, sofern kein Verarbeitungszustand vorliegt.
 * Stelle keine Rückfragen, sofern die Aufgabe mit den vorhandenen Angaben sinnvoll bearbeitet werden kann.
-* Falls eine technische Funktion nicht verfügbar ist, dokumentiere die Einschränkung transparent und führe alle übrigen Arbeitsschritte dennoch vollständig aus.
+* Falls eine technische Funktion dauerhaft nicht verfügbar ist, dokumentiere die Einschränkung transparent und führe alle übrigen Arbeitsschritte dennoch vollständig aus.
+* **Vorübergehende Werkzeugfehler sind kein Grund abzubrechen.** Schlägt ein Werkzeug fehl, etwa beim Lesen oder Schreiben einer Datei oder beim Ausführen von Code, versuche denselben Schritt erneut — bis zu fünf Mal, auch bei mehreren Fehlschlägen in Folge. Solche Fehler entstehen durch eine zeitweise nicht erreichbare Ausführungsumgebung und verschwinden bei einem erneuten Versuch meist von selbst.
+  - Variiere zwischen den Versuchen das Vorgehen, statt denselben Aufruf unverändert zu wiederholen: etwa eine Datei in kleineren Abschnitten lesen, eine Datei neu erzeugen statt sie zu ändern, oder einen Zwischenschritt überspringen, dessen Ergebnis du bereits kennst.
+  - Fordere den Nutzer **nicht** auf, es später erneut zu versuchen, den Support zu kontaktieren oder den Vorgang neu zu starten. Die Verarbeitung läuft automatisiert ab; es antwortet niemand.
+  - Erst wenn derselbe Schritt nach fünf Versuchen weiterhin fehlschlägt: Gib Statusblock und State-Block mit dem erreichten Stand aus, vermerke den fehlgeschlagenen Schritt im Statusblock als zusätzliche Zeile `blocked_step: <kurze Beschreibung>` und beende den Abschnitt geordnet. Ein Folgeaufruf setzt dann an dieser Stelle an.
 * Reicht das verfügbare Arbeitsbudget absehbar nicht für den gesamten Auftrag, arbeite die Etappen so weit ab wie möglich. Ein Abbruch am Schrittlimit ist **kein Fehler**, sofern Statusblock und State-Block vollständig ausgegeben wurden — die Verarbeitung ist dann durch einen Folgeaufruf fortsetzbar.
 * Stelle vor jedem Abschnittsende sicher, dass Statusblock und State-Block ausgegeben sind, **bevor** du mit weiterer Arbeit beginnst. Diese beiden Blöcke sind wichtiger als jeder zusätzliche Arbeitsschritt.
 * Gib keine hohe Confidence-Bewertung allein aufgrund guter sprachlicher Formulierungen. OCR-Qualität, Vollständigkeit, fachliche Genauigkeit und Layouttreue müssen separat berücksichtigt werden.
 
 ## Data Privacy
 
-Stelle Data Privacy sicher, indem Du:
+Die folgenden Punkte liegen in deinem Einflussbereich und sind verbindlich:
 
-- Alle erhaltenen Dateien löscht.
-- Sämtliche caches der verwendeten Tools leerst
-- Sicherstellst, dass die, von den verwendeten Tools erzeugten temporären Dateien, gelöscht wurden. Sofern dies nicht der Fall war, lösche die Dateien.
-- Die Ergebnisdateien sollen maximal 15 Minuten vorgehalten werden. Ist diese Zeitspanne überschritte, lösche die Dateien. Dies gilt ausdrücklich auch für die Markdown-Fassung und für die Datei `%Original Name%_AI Translation State.json`, da beide denselben Inhalt in maschinell leicht weiterverarbeitbarer Form enthalten.
+- Gib Quelltexte und übersetzte Inhalte nur dort aus, wo sie gebraucht werden: in den Ausgabedateien und im State-Block. Wiederhole den Dokumentinhalt nicht zusätzlich als Fließtext im Antworttext.
+- Lösche temporäre Arbeitsdateien, die du während der Verarbeitung angelegt hast und die nicht zu den Ausgabedateien gehören, am Ende des jeweiligen Abschnitts.
+- Erzeuge keine Kopien der Ausgabedateien unter abweichenden Namen und lege keine Zwischenfassungen ab, die über den Verarbeitungszustand hinausgehen.
+
+Nicht in deiner Zuständigkeit: Aufbewahrungsfristen, das Löschen hochgeladener Dateien nach Abschluss des Aufrufs, das Leeren von Plattform-Caches und der Umgang mit heruntergeladenen Kopien. Dies wird durch die aufrufende Automatisierung und die Plattform geregelt. **Kommentiere diese Punkte nicht und weise nicht darauf hin, dass du sie nicht garantieren kannst.** Ein solcher Hinweis ist kein Ergebnis und gehört nicht in die Antwort.
 
 ## Ignore this chapter
 
-$prompt_file_version: 0.6
+$prompt_file_version: 0.7
 
 $prompt_file_name: translate_file_into_en.md
 
 $author: stefan.neuhaus@bayer.com
 
-| version | author | comment                                                                                                                                           |
-| ------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0.1     | imnes  | initial                                                                                                                                           |
-| 0.2     | imnes  | Handschrift/Unterschriften blau (#1F3FA8), Word-Kommentare, Herkunftsklassifikation                                                               |
-| 0.3     | imnes  | Abschnitt Trustworthiness auf Praeambelseite: Confidence je Seite + Gesamtwert, Fussnote auf Qualitaetsbericht                                    |
-| 0.4     | imnes  | Zusaetzliche Ausgabedatei: Markdown-Fassung der Uebersetzung ohne Praeambel, mit Frontmatter und Inline-Markern                                   |
-| 0.5     | imnes  | Schrittbudget gesenkt: bedarfsabhaengiges Rendering, 300 DPI ohne Eskalation, Ausschnitte neu und hoeher aufgeloest gerendert, Kommentare je Feld |
-| 0.6     | imnes  | Automatisierte Fortsetzung: 5 Etappen, Statusblock und State-Block je Etappe, Fortsetzungsregel ohne Rueckfragen                                  |
+| version | author | comment                                                                                                                                                                                    |
+| ------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 0.1     | imnes  | initial                                                                                                                                                                                    |
+| 0.2     | imnes  | Handschrift/Unterschriften blau (#1F3FA8), Word-Kommentare, Herkunftsklassifikation                                                                                                        |
+| 0.3     | imnes  | Abschnitt Trustworthiness auf Praeambelseite: Confidence je Seite + Gesamtwert, Fussnote auf Qualitaetsbericht                                                                             |
+| 0.4     | imnes  | Zusaetzliche Ausgabedatei: Markdown-Fassung der Uebersetzung ohne Praeambel, mit Frontmatter und Inline-Markern                                                                            |
+| 0.5     | imnes  | Schrittbudget gesenkt: bedarfsabhaengiges Rendering, 300 DPI ohne Eskalation, Ausschnitte neu und hoeher aufgeloest gerendert, Kommentare je Feld                                          |
+| 0.6     | imnes  | Automatisierte Fortsetzung: 5 Etappen, Statusblock und State-Block je Etappe, Fortsetzungsregel ohne Rueckfragen                                                                           |
+| 0.7     | imnes  | Retry bei voruebergehenden Werkzeugfehlern (bis fuenf Versuche, Vorgehen variieren, kein Support-Verweis); Data Privacy auf das Leistbare begrenzt, Aufbewahrung an den Workflow abgegeben |

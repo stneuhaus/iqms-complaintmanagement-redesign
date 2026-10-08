@@ -26,5 +26,6 @@ This repository is **iqms-complaintmanagement-redesign**, a documentation-first 
 - Never commit secrets, credentials, PHI/PII dumps, or production complaint data.
 - Source Draw.io files remain in the Bayer SharePoint folder; link them, do not copy binaries unless explicitly asked.
 - New process interviews go in `docs/01-current-process/sources/` using `docs/templates/process-interview.md`.
+- **Translation prompt versioning** (`docs/05-design-spec/promtpts for text recogniztion/`): `prompt.de.md` is the German master and is edited in place. Every change to the English prompt creates a **new file** `prompt.en.<version>.md` — never edit an existing `prompt.en.*.md`. Released versions are immutable, because each one may already be in use by a workflow or a test run. Bump `$prompt_file_version` and add a changelog row in both the master and the new English file. See that folder's README.
 - Keep related docs in the **same change**: source notes with as-is/systems; new terms in the glossary; new capabilities as `FR-`/`NFR-` IDs; product choices as ADRs; phase status in `docs/README.md`.
 - At the end of a session, list which docs you changed and which related docs you deliberately did not change (and why).

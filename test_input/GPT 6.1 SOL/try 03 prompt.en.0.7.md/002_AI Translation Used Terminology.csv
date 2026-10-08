@@ -1,0 +1,13 @@
+source_term,translation,occurrences,locations,variants,preferred_decision
+dispositivo,device,1,"p. 1, opening",device,Direct translation
+lotto n°,lot no.,1,"p. 1, product identification",lot / batch,Use lot
+scadenza,expiration,1,"p. 1, product identification",expiration / expiry,American English expiration
+spirale,IUD,2,"p. 1, insertion and contamination",IUD / coil,Use IUD; source also explicitly uses IUD
+IUD,IUD,1,"p. 1, release",IUD,Retain abbreviation
+applicatore,applicator,1,"p. 1, device malfunction",applicator / inserter,Direct source term; no unsupported technical substitution
+fondo uterino,uterine fundus,1,"p. 1, release",uterine fundus,Anatomical term
+materiale biologico,biological material,1,"p. 1, contamination",biological material,Direct translation
+MEDICO CHIRURGO,PHYSICIAN AND SURGEON,1,"p. 1, stamp",physician and surgeon,Preserve qualification wording
+O.M.,O.M.,1,"p. 1, stamp",none,Retain; no independently verified expansion
+C.F.,C.F.,1,"p. 1, stamp",none,Retain source abbreviation
+In fede,"Yours faithfully,",1,"p. 1, closing",Yours faithfully / In witness thereof,Formal certification closing

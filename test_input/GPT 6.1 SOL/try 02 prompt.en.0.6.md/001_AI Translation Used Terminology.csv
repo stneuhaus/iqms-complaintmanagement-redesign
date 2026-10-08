@@ -1,0 +1,21 @@
+﻿source,target,occurrencecount,locations,variants,decision
+PSP,PSP,3,p1 header; p2 header; p3 header,,Retain acronym without expansion; no reliable expansion supplied.
+aflibercept,aflibercept,7,p1 header: twice; p2 header: twice; p3 header: twice; p3 Section 3 certification,Aflibercept,Use generic drug name aflibercept; preserve concentrations and decimal comma.
+flacon,vial,7,"p1 40 mg/mL presentation; p1 114,3 mg/mL presentation; p2 I(e); p2 I(p); p2 I(r); p3 certification: twice",,"Vial, not bottle."
+seringue préremplie,prefilled syringe,5,"p1 40 mg/mL presentation; p1 114,3 mg/mL presentation; p2 I(p); p3 certification: twice",,Use prefilled syringe consistently.
+évènement indésirable,adverse event,2,p1 warning: form not intended for reporting; p1 warning: reporting instruction,évènements indésirables,"Adverse event, not adverse reaction; preserve reporting URLs."
+Pharmacovigilance,Pharmacovigilance,1,p1 adverse-event warning,,Translate full term; do not expand separate administrative PV acronym.
+N° de lot / n°lot,lot no.,2,p1 EYLEA lot field; p2 I(i) needle subfield,N° de lot | n°lot,Use lot rather than batch; preserve identifier and uncertainty.
+blister,blister pack,2,p2 I(b); p2 I(o),,Blister pack; distinguish handwritten broader emballage.
+emballage,packaging,2,p2 I(r); p2 handwritten complaint,,"Packaging, not automatically blister pack."
+exposition professionnelle au produit,occupational exposure to the product,3,p2 I(m); p2 I(n); p2 I(q),Exposition professionnelle au produit,Occupational exposure; preserve with/without distinctions.
+rupture chaine du froid / rupture de la chaine du froid,break in the cold chain,2,p2 II(a); p3 administrative addition,rupture chaine du froid | rupture de la chaine du froid,Preserve the checked concern and subsequent denial without reconciling them.
+Luer Lock,Luer Lock,1,p2 I(i),,Retain connector designation.
+solution injectable (injection intra-vitréenne),solution for injection (intravitreal injection),1,p3 Section 3 certification,,Use intravitreal; do not change route.
+forme pharmaceutique,dosage form,1,p3 follow-up reason 2,,Standard pharmaceutical term; maintain assignment to second labeled row.
+SPR,SPR,1,p3 administrative addition,,Retain unexpanded; context does not authorize interpretation.
+PV,PV,1,p3 transmitted PV checkbox,,Retain administrative acronym unexpanded.
+AQ,AQ,1,p3 transmitted AQ checkbox,,Retain administrative acronym unexpanded.
+RPPS,RPPS,2,p1 registration field label; p1 physician stamp,,Retain acronym and identifier; do not fill blank registration field from stamp.
+CNIL,CNIL,1,p3 data-protection notice,,Retain authority acronym unchanged.
+Conventionné Secteur II,Sector II contracted practitioner,1,p1 physician stamp,,Preserve French practice-sector designation without asserting an American insurance equivalent.
