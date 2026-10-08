@@ -101,6 +101,57 @@ Diese Regel senkt nicht den fachlichen Anspruch. Vollständigkeit, Genauigkeit u
 
 Führe die folgenden Phasen in der angegebenen Reihenfolge aus.
 
+### Etappen und Unterbrechbarkeit
+
+Dieser Prompt wird automatisiert ausgeführt. Die Verarbeitung kann jederzeit am Schrittlimit des aufrufenden Systems enden. Das ist **kein Fehler**, sondern ein vorgesehener Zustand: Ein nachfolgender Aufruf setzt die Arbeit fort. Damit das verlustfrei funktioniert, sind die zehn Phasen in fünf Etappen gegliedert.
+
+| Etappe | Umfasst | Ergebnis am Ende der Etappe |
+| ------ | ------------- | ----------------------------------------------------- |
+| **E1** | Phasen 1–2 | Seitenzahl, Texterkennung, Herkunftsklassifikation |
+| **E2** | Phasen 3–5 | vollständige Übersetzung, Terminologieliste |
+| **E3** | Phase 6 | %Original Name%_Translated by AI.docx |
+| **E4** | — | %Original Name%_Translated by AI.md |
+| **E5** | Phasen 7–10 | Qualitätsbericht und Terminologie-CSV |
+
+Regeln:
+
+- Arbeite die Etappen strikt in dieser Reihenfolge ab.
+- Beginne keine Etappe, die du absehbar nicht abschließen kannst. Beende die Verarbeitung lieber geordnet.
+- Gib **nach jeder** abgeschlossenen Etappe zuerst den Statusblock und unmittelbar danach den State-Block aus (siehe unten). Erst danach beginnst du mit der nächsten Etappe.
+- Diese beiden Blöcke haben Vorrang vor jeder weiteren Arbeit. Ohne sie ist eine Fortsetzung nicht möglich.
+
+#### Statusblock
+
+Gib nach jeder Etappe exakt dieses Format aus. Die Begrenzerzeilen sind zeichengenau einzuhalten, da sie maschinell ausgewertet werden:
+
+```text
+===AI-TRANSLATION-STATUS===
+run_state: INCOMPLETE
+stages_completed: E1,E2,E3
+next_stage: E4
+pages_total: 3
+pages_processed: 3
+handwritten_segments: 19
+files_written: 001_Translated by AI.docx
+===END-STATUS===
+```
+
+- `run_state`: `INCOMPLETE`, solange Etappen offen sind. `COMPLETE` nur dann, wenn alle fünf Etappen abgeschlossen **und** alle vier Ausgabedateien vollständig geschrieben sind. Setze bei `COMPLETE` zusätzlich `next_stage: NONE`.
+- `files_written`: die bereits vollständig gespeicherten Ausgabedateien, mit Komma getrennt.
+- Gib den Block immer **vollständig** aus. Ein abgeschnittener Block ist für das aufrufende System unbrauchbar.
+
+#### State-Block
+
+Gib unmittelbar nach dem Statusblock den vollständigen Verarbeitungszustand als JSON aus:
+
+```text
+===AI-TRANSLATION-STATE===
+{ ... siehe Abschnitt „Verarbeitungszustand" unter AUSGABEDATEIEN ... }
+===END-STATE===
+```
+
+Dieser Block ist zwingend, weil ein nachfolgender Aufruf in einer neuen Sitzung stattfinden kann, in der keine zuvor erzeugte Datei mehr vorhanden ist. Nur was in diesem Block steht, übersteht den Aufrufwechsel.
+
 ### PHASE 1: DOKUMENTANALYSE
 
 Analysiere zunächst die gesamte PDF und ermittle:
@@ -143,7 +194,7 @@ Wenn für eine Seite beide Quellen vorliegen und voneinander abweichen, dokument
 
 Rendere alle zu rendernden Seiten in **einem** Durchgang mit **300 DPI**. Erhöhe die Auflösung nicht und wiederhole das Rendering **ganzer Seiten** nicht mit höheren Werten. Für eng begrenzte Ausschnitte gilt abweichend der nachfolgende Abschnitt „Ausschnitt-Nachprüfung".
 
-Begründung, damit diese Regel nicht „optimiert" wird: Die verarbeitende Schnittstelle skaliert jedes Eingabebild auf ihre eigenen Grenzen herunter. Für eine A4-Seite ist der Sättigungspunkt bereits bei rund 200 DPI erreicht — 300, 400 und 600 DPI ergeben exakt dasselbe Bild, das das Modell tatsächlich sieht. Höhere Renderauflösungen kosten Zeit und Arbeitsschritte, bringen keinerlei zusätzliches Detail und erzeugen durch die stärkere Herunterskalierung zusätzliche Artefakte, die die Handschrifterkennung verschlechtern können.
+Begründung, damit diese Regel nicht „optimiert" wird: Die verarbeitende Schnittstelle skaliert jedes Eingabebild auf ihre eigenen Grenzen herunter; für eine A4-Seite ergeben 300, 400 und 600 DPI exakt dasselbe Bild, das das Modell tatsächlich sieht. Höhere Renderauflösungen bringen daher kein zusätzliches Detail, kosten aber Arbeitsschritte und erzeugen durch die stärkere Herunterskalierung Artefakte.
 
 #### Ausschnitt-Nachprüfung bei unlesbaren Stellen
 
@@ -153,20 +204,12 @@ Wenn eine einzelne Stelle nach der Erkennung unlesbar bleibt, prüfe sie über e
 - Begrenze den Ausschnitt auf die betroffene Stelle zuzüglich eines Rands von etwa 10 % je Seite, damit Ober- und Unterlängen, diakritische Zeichen und Feldgrenzen nicht abgeschnitten werden.
 - **Wähle die Renderauflösung nach der Größe des Ausschnitts:** Render-DPI ≈ 6350 geteilt durch die lange Kante des Ausschnitts in Zentimetern, höchstens 2400 DPI.
 
-| Lange Kante des Ausschnitts | Renderauflösung | Detailgewinn gegenüber 300 DPI |
-| --------------------------- | --------------- | ------------------------------ |
-| 2 cm | ~2400 DPI | 8fach |
-| 4 cm | ~1600 DPI | 5fach |
-| 6 cm | ~1050 DPI | 3,5fach |
-| 8 cm | ~800 DPI | 2,6fach |
-| 12 cm | ~530 DPI | 1,8fach |
-| 16 cm | ~400 DPI | 1,3fach |
-| 21 cm (volle A4-Breite) | ~300 DPI | keiner |
+  Beispiele: ein 6 cm breites Feld ergibt rund 1050 DPI und damit den 3,5fachen Detailgrad; ein 2 cm breites Feld rund 2400 DPI und den 8fachen. Bei voller A4-Breite von 21 cm ergibt die Formel 300 DPI, also keinen Gewinn.
 
 Diese Staffelung ist möglich, weil die Skalierungsgrenze je **Bild** gilt und nicht je Seite: Ein kleiner Ausschnitt schöpft sie erst bei einer sehr viel höheren Auflösung aus. Genau daraus entsteht der Detailgewinn — nicht aus dem Ausschneiden selbst.
 
 - Führe **höchstens einen** Ausschnitt-Versuch je unlesbarer Stelle durch. Diese Regel ist keine Eskalationsschleife.
-- Nimmt die betroffene Stelle nahezu die volle Seitenbreite ein, bringt ein Ausschnitt nichts, wie die letzte Tabellenzeile zeigt. Klassifiziere sie dann unmittelbar als [UNCLEAR] oder [ILLEGIBLE], ohne Nachprüfung.
+- Nimmt die betroffene Stelle nahezu die volle Seitenbreite ein, bringt ein Ausschnitt nichts, wie das letzte Beispiel oben zeigt. Klassifiziere sie dann unmittelbar als [UNCLEAR] oder [ILLEGIBLE], ohne Nachprüfung.
 - Rendere auch für die Nachprüfung niemals die ganze Seite erneut.
 
 #### Bildvorverarbeitung
@@ -719,22 +762,55 @@ Wenn eine dieser Prüfungen nicht aufgeht, gilt die Aufgabe als unvollständig u
 
 # AUSGABEDATEIEN
 
-## Reihenfolge und Vorgehen bei knappem Arbeitsbudget
+## Reihenfolge der Ausgabedateien
 
-Erzeuge die Ausgabedateien in genau dieser Reihenfolge:
+Erzeuge die Ausgabedateien in der Reihenfolge der Etappen E3 bis E5: zuerst `%Original Name%_Translated by AI.docx` einschließlich Präambelseite, dann `%Original Name%_Translated by AI.md`, dann `%Original Name%_AI Translation Quality Report.docx` und zuletzt `%Original Name%_AI Translation Used Terminology.csv`.
 
-1. **%Original Name%_Translated by AI.docx** — das Übersetzungsdokument einschließlich Präambelseite,
-2. **%Original Name%_Translated by AI.md** — die Markdown-Fassung,
-3. **%Original Name%_AI Translation Quality Report.docx** — der Qualitätsbericht,
-4. **%Original Name%_AI Translation Used Terminology.csv** — die Terminologieliste.
-
-Regeln:
-
-- Stelle jede Datei **vollständig fertig und speichere sie**, bevor du mit der nächsten beginnst. Beginne nicht mehrere Dateien parallel.
+- Stelle jede Datei **vollständig fertig und speichere sie**, bevor du mit der nächsten beginnst. Beginne nicht mehrere Dateien parallel und beginne keine Datei, die du nicht abschließen kannst.
 - Schreibe die Präambelseite beim Erzeugen des DOCX unmittelbar als erste Seite mit. Öffne das fertige Dokument nicht erneut, um die Präambel nachträglich voranzustellen.
-- Wenn absehbar ist, dass das verfügbare Arbeitsbudget nicht für alle Dateien reicht: Schließe die gerade begonnene Datei ab, beende die Verarbeitung geordnet und nenne ausdrücklich, welche Dateien fehlen und warum. Brich nicht stillschweigend ab und beginne keine Datei, die du nicht abschließen kannst.
-- Der Qualitätsbericht darf in diesem Fall verkürzt ausfallen. Er muss dann jedoch die fehlenden Dateien und den Grund benennen.
-- Ein dokumentierter Teilabschluss ist einem Abbruch mitten in der Verarbeitung vorzuziehen.
+- Trage jede fertiggestellte Datei unverzüglich in `files_written` des Verarbeitungszustands ein.
+
+## Verarbeitungszustand
+
+Führe den Verarbeitungszustand zweifach:
+
+1. Als Datei `%Original Name%_AI Translation State.json`, für eine Fortsetzung innerhalb derselben Sitzung.
+2. Als State-Block im Antworttext nach jeder Etappe, für eine Fortsetzung in einem neuen Aufruf. Beide enthalten denselben Inhalt.
+
+Pflichtfelder:
+
+```text
+{
+  "source_file": "<Name der Quelldatei>",
+  "prompt_file_version": "<Version dieser Promptdatei>",
+  "pages": <programmatisch ermittelte Seitenzahl>,
+  "source_language": "<Ausgangssprache>",
+  "target_language": "<verwendete englische Sprachvariante>",
+  "stages_completed": ["E1", "E2"],
+  "files_written": ["<Dateiname>"],
+  "pages_processed": [
+    { "page": 1, "type": "nativ|gescannt|gemischt|Bild", "rendered": true,
+      "dpi": 300, "ocr_confidence": 95, "translation_confidence": 94,
+      "layout_confidence": 92, "page_confidence": 94 }
+  ],
+  "segments": [
+    { "page": 1, "field": "<Feldbezeichnung>", "source": "HANDWRITING|SIGNATURE|STAMP",
+      "recognition_confidence": "HIGH|MEDIUM|LOW",
+      "source_text": "<Quelltext>", "translation": "<Übersetzung>",
+      "marker": "none|UNCLEAR|ILLEGIBLE", "reason": "<Begründung>",
+      "crop_dpi": <Auflösung der Ausschnitt-Nachprüfung, sonst null> }
+  ],
+  "terminology": [
+    { "source_term": "<Ausgangsbegriff>", "translation": "<englischer Begriff>",
+      "occurrences": <Anzahl> }
+  ],
+  "translated_content": "<der vollständige übersetzte Inhalt in strukturierter Form>"
+}
+```
+
+Zu `translated_content`: Dieses Feld ist der Grund, warum eine Fortsetzung günstig ist. Ohne es müsste ein Folgeaufruf die Übersetzung vollständig neu erstellen, also den aufwendigsten Arbeitsschritt wiederholen. Halte den übersetzten Inhalt deshalb vollständig und strukturiert fest, sobald Etappe E2 abgeschlossen ist — mit Überschriftenebenen, Tabellen, Formularfeldern und der Zuordnung zu den Segmenten.
+
+Der Verarbeitungszustand ist ein Arbeitsartefakt und keine Lieferung an den Fachbereich. Nenne ihn nicht auf der Präambelseite und nicht im Qualitätsbericht als Ergebnisdatei.
 
 ## Übersetzung
 
@@ -882,12 +958,25 @@ Erzeuge ein oder zwei Prämbel Seite(n):
   "¹ The confidence value is a reasoned quality estimate, not a proof of correctness. For an explanation of how it is calculated, what the quality levels mean, and which passages require manual verification, see the accompanying quality report: {Name der erzeugten Qualitätsberichtsdatei}."
 - Setze `{Name der erzeugten Qualitätsberichtsdatei}` auf den tatsächlichen Dateinamen nach dem Muster `%Original Name%_AI Translation Quality Report.docx`.
 
+# FORTSETZUNG EINER UNTERBROCHENEN VERARBEITUNG
+
+Dieser Abschnitt gilt, wenn der Aufruf einen Verarbeitungszustand mitbringt oder zur Fortsetzung auffordert.
+
+1. **Stelle keine Rückfragen und bitte nicht um Bestätigung.** Die Verarbeitung läuft automatisiert ab; es antwortet niemand. Setze unmittelbar fort.
+2. Werte **zuerst** den mitgegebenen State-Block aus, danach die Datei `%Original Name%_AI Translation State.json`, sofern sie vorhanden ist. Liegt beides nicht vor, beginne mit Etappe E1.
+3. Prüfe ergänzend anhand von `files_written` und der tatsächlich vorhandenen Dateien, welche Ausgabedateien bereits vollständig sind.
+4. **Wiederhole keine abgeschlossene Etappe.** Rendere keine Seite erneut, erstelle keine Übersetzung neu und überschreibe keine fertige Datei. Verwende die Inhalte aus dem State, insbesondere `translated_content`, `segments` und `terminology`.
+5. Setze bei der **ersten offenen** Etappe an, also bei `next_stage`. War eine Etappe mitten in der Arbeit abgebrochen, führe **diese eine** Etappe vollständig neu durch: Teilergebnisse innerhalb einer Etappe gelten als nicht belastbar. Eine unvollständig geschriebene Datei ist zu verwerfen und neu zu erzeugen.
+6. Führe State und Statusblock nach jeder Etappe weiter wie im Abschnitt „Etappen und Unterbrechbarkeit" beschrieben.
+7. Vermerke im Qualitätsbericht unter „Einschränkungen", dass die Verarbeitung in mehreren Abschnitten erfolgte, und nenne die Etappen, bei denen unterbrochen wurde.
+
 # ABSCHLIESSENDE ANWEISUNG
 
-* Beginne direkt mit der Analyse der beigefügten PDF-Datei.
+* Beginne direkt mit der Analyse der beigefügten PDF-Datei, sofern kein Verarbeitungszustand vorliegt.
 * Stelle keine Rückfragen, sofern die Aufgabe mit den vorhandenen Angaben sinnvoll bearbeitet werden kann.
 * Falls eine technische Funktion nicht verfügbar ist, dokumentiere die Einschränkung transparent und führe alle übrigen Arbeitsschritte dennoch vollständig aus.
-* Reicht das verfügbare Arbeitsbudget absehbar nicht für den gesamten Auftrag, gilt die Prioritätsreihenfolge aus dem Abschnitt „Reihenfolge und Vorgehen bei knappem Arbeitsbudget". Ein dokumentierter Teilabschluss mit vollständigen Einzeldateien ist einem Abbruch mitten in der Verarbeitung vorzuziehen.
+* Reicht das verfügbare Arbeitsbudget absehbar nicht für den gesamten Auftrag, arbeite die Etappen so weit ab wie möglich. Ein Abbruch am Schrittlimit ist **kein Fehler**, sofern Statusblock und State-Block vollständig ausgegeben wurden — die Verarbeitung ist dann durch einen Folgeaufruf fortsetzbar.
+* Stelle vor jedem Abschnittsende sicher, dass Statusblock und State-Block ausgegeben sind, **bevor** du mit weiterer Arbeit beginnst. Diese beiden Blöcke sind wichtiger als jeder zusätzliche Arbeitsschritt.
 * Gib keine hohe Confidence-Bewertung allein aufgrund guter sprachlicher Formulierungen. OCR-Qualität, Vollständigkeit, fachliche Genauigkeit und Layouttreue müssen separat berücksichtigt werden.
 
 ## Data Privacy
@@ -897,20 +986,21 @@ Stelle Data Privacy sicher, indem Du:
 - Alle erhaltenen Dateien löscht.
 - Sämtliche caches der verwendeten Tools leerst
 - Sicherstellst, dass die, von den verwendeten Tools erzeugten temporären Dateien, gelöscht wurden. Sofern dies nicht der Fall war, lösche die Dateien.
-- Die Ergebnisdateien sollen maximal 15 Minuten vorgehalten werden. Ist diese Zeitspanne überschritte, lösche die Dateien. Dies gilt ausdrücklich auch für die Markdown-Fassung, da sie denselben Inhalt in maschinell leicht weiterverarbeitbarer Form enthält.
+- Die Ergebnisdateien sollen maximal 15 Minuten vorgehalten werden. Ist diese Zeitspanne überschritte, lösche die Dateien. Dies gilt ausdrücklich auch für die Markdown-Fassung und für die Datei `%Original Name%_AI Translation State.json`, da beide denselben Inhalt in maschinell leicht weiterverarbeitbarer Form enthalten.
 
 ## Ignore this chapter
 
-$prompt_file_version: 0.5
+$prompt_file_version: 0.6
 
 $prompt_file_name: translate_file_into_en.md
 
 $author: stefan.neuhaus@bayer.com
 
-| version | author | comment                                                                                                                                                                                 |
-| ------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0.1     | imnes  | initial                                                                                                                                                                                 |
-| 0.2     | imnes  | Handschrift/Unterschriften blau (#1F3FA8), Word-Kommentare, Herkunftsklassifikation                                                                                                     |
-| 0.3     | imnes  | Abschnitt Trustworthiness auf Praeambelseite: Confidence je Seite + Gesamtwert, Fussnote auf Qualitaetsbericht                                                                          |
-| 0.4     | imnes  | Zusaetzliche Ausgabedatei: Markdown-Fassung der Uebersetzung ohne Praeambel, mit Frontmatter und Inline-Markern                                                                         |
-| 0.5     | imnes  | Schrittbudget gesenkt: bedarfsabhaengiges Rendering, 300 DPI ohne Eskalation, Ausschnitte neu und hoeher aufgeloest gerendert, Kommentare je Feld, Ausgabereihenfolge mit Teilabschluss |
+| version | author | comment                                                                                                                                           |
+| ------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0.1     | imnes  | initial                                                                                                                                           |
+| 0.2     | imnes  | Handschrift/Unterschriften blau (#1F3FA8), Word-Kommentare, Herkunftsklassifikation                                                               |
+| 0.3     | imnes  | Abschnitt Trustworthiness auf Praeambelseite: Confidence je Seite + Gesamtwert, Fussnote auf Qualitaetsbericht                                    |
+| 0.4     | imnes  | Zusaetzliche Ausgabedatei: Markdown-Fassung der Uebersetzung ohne Praeambel, mit Frontmatter und Inline-Markern                                   |
+| 0.5     | imnes  | Schrittbudget gesenkt: bedarfsabhaengiges Rendering, 300 DPI ohne Eskalation, Ausschnitte neu und hoeher aufgeloest gerendert, Kommentare je Feld |
+| 0.6     | imnes  | Automatisierte Fortsetzung: 5 Etappen, Statusblock und State-Block je Etappe, Fortsetzungsregel ohne Rueckfragen                                  |
