@@ -1,7 +1,7 @@
 # Resume loop for the translation prompt
 
 Status: Draft
-Last reviewed: 2026-10-08
+Last reviewed: 2026-10-09
 
 Written for: the engineer who builds the n8n workflow around the translation prompt.
 
@@ -9,7 +9,7 @@ To run the prompt by hand in myGenAssist instead — before the workflow exists 
 
 ## Why this document exists
 
-The translation prompt ([`promtpts for text recogniztion/prompt.en.0.7.md`](promtpts%20for%20text%20recogniztion/prompt.en.0.7.md), German master [`prompt.de.md`](promtpts%20for%20text%20recogniztion/prompt.de.md)) reliably hits the step limit of myGenAssist before a document is fully processed:
+The translation prompt ([`promtpts for text recogniztion/prompt.en.0.8.md`](promtpts%20for%20text%20recogniztion/prompt.en.0.8.md), German master [`prompt.de.md`](promtpts%20for%20text%20recogniztion/prompt.de.md)) reliably hits the step limit of myGenAssist before a document is fully processed:
 
 > The assistant stopped after reaching the maximum number of steps for this turn.
 
@@ -106,6 +106,38 @@ The state carries `translated_content`, the full translated text. This is what m
 
 The prompt also writes a `%Original Name%_AI Translation State.json` file. Do not rely on it across calls — if the follow-up call starts a fresh session, the sandbox is empty and that file is gone. The in-response state block is the authoritative transport.
 
+From 0.8 the state also carries a `budget` object. It is pass-through data: n8n puts the figures in, the prompt stores them and prints them in the quality report. See the next section.
+
+## Budget measurement
+
+From 0.8 the quality report opens with the budget consumed for the document. **The prompt measures nothing** — it is explicitly forbidden from calling a tool, running code or making a network request for this, because a measurement step would quietly eat the step budget it is meant to measure.
+
+n8n reads the credit balance **before every call** and passes the consumption accrued since the first call in the message body:
+
+```text
+budget_consumed: 0.42
+budget_unit: EUR
+budget_calls: 2
+```
+
+- Keep the balance from the first call as the baseline for the document.
+- On the first call, `budget_consumed: 0` — nothing has been consumed yet.
+- The figure in the report therefore covers everything up to **before** the last call. The last call, the one that writes the report, is necessarily missing from it: its cost is only known once the report has already been written.
+- For the full cost per document, measure once more after `COMPLETE` and write the value to the audit log ([NFR-004](../02-requirements/non-functional-requirements.md)). That is the dependable number for a cost projection; the number in the report is the documented partial figure, and it says so.
+- Credentials for the budget endpoint belong in the n8n credential store — never in the message body and never in the state block ([NFR-002](../02-requirements/non-functional-requirements.md)). The state is passed back and forth between calls and would otherwise carry the secret permanently.
+- If the measurement fails, send the call anyway and omit the budget lines. The run must not fail over a measurement; the report then states `not available`.
+
+### To settle before building this
+
+The budget endpoint is not specified here yet. Four properties change the implementation and need to be confirmed against its documentation:
+
+| Question | Why it matters |
+| --- | --- |
+| Remaining balance or cumulative usage? | Flips the sign. The wrong way round puts a negative number in the report. |
+| Update delay — immediate or batched? | With a delay, the reading taken before call *n* does not even include call *n−1* in full, and the reported figure is too low by an unknown amount. |
+| Scope — per user, project or API key? | Determines how much parallel processing on the same account distorts the difference. |
+| Rate limit | The loop reads once per call; confirm that fits. |
+
 ## Data retention — owned by the workflow, not the prompt
 
 Prompt versions up to 0.6 asked the model to delete uploaded files, clear tool caches and drop result files after 15 minutes. A prompt cannot do any of that: once the turn ends the model is no longer running, and it has no access to platform caches or to copies you downloaded. In practice the model answered with a disclaimer explaining what it could not guarantee — noise in the response, and no data actually deleted.
@@ -126,6 +158,7 @@ For the 3-page reference document (`test_input/001.pdf`), expect 2–3 calls. Th
 - **Does myGenAssist return files through n8n, or only text?** If only text, the DOCX and CSV cannot be collected as artifacts and would have to be built on the n8n side from the Markdown version and the state. This changes how stages E3 and E5 are used and should be answered first.
 - **Can a call continue an existing session?** If yes, the state file survives and the in-response block is a redundant safeguard. If no, the block is the only transport. The prompt works either way.
 - **Request size ceiling** for prompt + PDF + state on larger documents.
+- **The budget endpoint's four properties** — see the table under "Budget measurement". Settle these before the figure in the quality report is used for a cost projection.
 
 ## Related
 

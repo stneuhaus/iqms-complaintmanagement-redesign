@@ -1,7 +1,7 @@
 # Translation prompt
 
 Status: In progress
-Last reviewed: 2026-10-08
+Last reviewed: 2026-10-09
 
 The prompt that drives OCR, translation and document generation for non-English complaint attachments ([FR-006](../../02-requirements/functional-requirements.md)).
 
@@ -10,8 +10,8 @@ The prompt that drives OCR, translation and document generation for non-English 
 | File | Role |
 | --- | --- |
 | `prompt.de.md` | **German master.** Edited in place. All changes start here. |
-| `prompt.en.0.7.md` | Current English version — the one to use. |
-| `prompt.en.0.6.md`, `prompt.en.0.5.md`, `prompt.en.0.4.md` | Earlier English versions. Frozen. |
+| `prompt.en.0.8.md` | Current English version — the one to use. |
+| `prompt.en.0.7.md`, `prompt.en.0.6.md`, `prompt.en.0.5.md`, `prompt.en.0.4.md` | Earlier English versions. Frozen. |
 
 ## Versioning rule
 
@@ -22,7 +22,7 @@ A released version is immutable because it may already be in use — referenced 
 Workflow for a change:
 
 1. Edit `prompt.de.md` (the master).
-2. Copy the current English file to the next version number: `prompt.en.0.7.md` → `prompt.en.0.8.md`.
+2. Copy the current English file to the next version number: `prompt.en.0.8.md` → `prompt.en.0.9.md`.
 3. Apply the same changes there.
 4. Set `$prompt_file_version` in **both** files and add one changelog row in each.
 5. Update the table above so the current version is unambiguous.

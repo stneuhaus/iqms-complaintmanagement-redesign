@@ -8,10 +8,10 @@ This table is the **only status index**. Allowed values: Draft, In progress, Agr
 | --- | --- | --- | --- |
 | [00-overview](00-overview/project-brief.md) | Why this project exists | Draft | 2026-09-18 |
 | [01-current-process](01-current-process/README.md) | As-is process, systems, source notes | In progress | 2026-09-18 |
-| [02-requirements](02-requirements/README.md) | Stakeholders, FRs, NFRs, glossary | In progress | 2026-09-18 |
+| [02-requirements](02-requirements/README.md) | Stakeholders, FRs, NFRs, glossary | In progress | 2026-10-09 |
 | [03-architecture](03-architecture/README.md) | Target architecture | Later | 2026-09-18 |
 | [04-functional-spec](04-functional-spec/README.md) | What the solution must do | Later | 2026-09-18 |
-| [05-design-spec](05-design-spec/README.md) | How the solution will be built | Later | 2026-09-18 |
+| [05-design-spec](05-design-spec/README.md) | How the solution will be built | Later | 2026-10-09 |
 | [06-decisions](06-decisions/README.md) | Architecture decision records | In progress | 2026-09-18 |
 | [templates](templates/README.md) | Meeting and interview templates | Agreed | 2026-09-18 |
 

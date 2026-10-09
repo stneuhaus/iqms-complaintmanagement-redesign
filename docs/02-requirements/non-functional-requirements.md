@@ -17,3 +17,4 @@ Status: collecting. IDs are stable.
 | NFR-011 | Confidence | AI outputs for category / extraction / completeness must expose confidence so CM can apply review thresholds (Zielprozess bands ≥95% / 80–95% / ≤80% are a design hypothesis until agreed) | Zielprozess |
 | NFR-012 | Compatibility | Existing GBS / PTC email addresses and partner-facing channels must keep working without forced change management for senders | REQ-010 |
 | NFR-013 | Access | Role-based access for Complaint Managers, QA reviewers, and administrators (gap noted in URS quality check) | URS GAP-07; TBD |
+| NFR-014 | Cost | AI processing cost per document must be reportable so running costs can be projected against volume before rollout | translation prompt 0.8; relates to NFR-006 volume |

@@ -153,6 +153,17 @@ Gib unmittelbar nach dem Statusblock den vollständigen Verarbeitungszustand als
 
 Dieser Block ist zwingend, weil ein nachfolgender Aufruf in einer neuen Sitzung stattfinden kann, in der keine zuvor erzeugte Datei mehr vorhanden ist. Nur was in diesem Block steht, übersteht den Aufrufwechsel.
 
+### BUDGETANGABE
+
+Der Aufruf kann eine Budgetangabe des aufrufenden Systems mitbringen, zum Beispiel als Zeilen `budget_consumed: <Wert>`, `budget_unit: <Einheit>` und `budget_calls: <Anzahl>` in der Nachricht oder im Verarbeitungszustand.
+
+- Übernimm diese Werte **unverändert** in den Verarbeitungszustand unter `budget` und gib sie im Qualitätsbericht wie in Phase 10 beschrieben aus.
+- **Ermittle das Budget nicht selbst.** Rufe dafür kein Werkzeug auf, führe keinen Code aus und stelle keine Netzanfrage. Die Messung ist Sache des aufrufenden Systems.
+- **Rechne die Werte nicht um und schätze sie nicht.** Weder aus der Länge der Verarbeitung noch aus der Anzahl der Seiten noch aus Erfahrungswerten. Eine erfundene Zahl ist schlechter als eine fehlende.
+- Bringt der Aufruf keine Budgetangabe mit, trage `null` ein und weise den Verbrauch im Bericht als `nicht verfügbar` aus.
+- Bringt ein Folgeaufruf einen neueren Wert mit, ersetzt dieser den bisherigen: er ist der aktuellere Stand. Fehlt er in einem Folgeaufruf, behalte den vorhandenen Wert.
+- Die Budgetangaben gehören ausschließlich in den Qualitätsbericht und in den Verarbeitungszustand. Sie erscheinen **nicht** im Übersetzungsdokument, nicht auf der Präambelseite und nicht in der Markdown-Fassung.
+
 ### PHASE 1: DOKUMENTANALYSE
 
 Analysiere zunächst die gesamte PDF und ermittle:
@@ -700,6 +711,11 @@ Seiten ohne erkennbare Probleme können zusammengefasst werden. Problematische S
 
 Erstelle zusätzlich zur übersetzten Datei einen strukturierten Qualitätsbericht mit folgendem Aufbau:
 
+Budgetverbrauch
+verbrauchtes Budget mit Einheit,
+Anzahl der Aufrufe, über die der Lauf verteilt war.
+Hinweis unter die Zahl setzen: Der Wert wurde vom aufrufenden System vor dem letzten Aufruf gemessen. Der Aufwand dieses letzten Aufrufs — einschließlich der Erstellung dieses Berichts — ist darin **nicht** enthalten. Der Wert ist die Differenz eines kontoweiten Saldos; parallele Verarbeitung auf demselben Konto ist mit enthalten.
+Liegt keine Angabe vor, trage `nicht verfügbar` ein, nenne den Grund und vermerke denselben Punkt unter „Einschränkungen". Gib in diesem Fall keine geschätzte Zahl an.
 Name der verarbeiteten Datei
 Namen aller erzeugten Dateien, einschließlich der Markdown-Fassung
 Name des verwendeten LLMs
@@ -758,6 +774,7 @@ Prüfe vor der Fertigstellung:
 - Die Tabelle „Trustworthiness" auf der Präambelseite muss genau N Seitenzeilen zuzüglich der Gesamtzeile enthalten, wobei N der programmatisch ermittelten Seitenzahl entspricht.
 - Jeder Wert in dieser Tabelle muss mit der seitenbezogenen Bewertung aus Phase 9 übereinstimmen, die Gesamtzeile mit dem Confidence Index aus Phase 8.
 - In Stufe 1 der Rückfallkaskade muss jedes handschriftliche Formularfeld beziehungsweise jeder handschriftliche Block kommentiert sein. Wurde Stufe 2 oder 3 verwendet, genügt die Kommentierung der unsicheren Stellen; der reduzierte Umfang muss dann unter „Einschränkungen" dokumentiert sein.
+- Die Budgetangaben im Qualitätsbericht müssen den `budget`-Werten im Verarbeitungszustand entsprechen. Rechne sie im Bericht nicht nach und verändere sie nicht.
 
 Wenn eine dieser Prüfungen nicht aufgeht, gilt die Aufgabe als unvollständig und muss korrigiert werden.
 
@@ -789,6 +806,12 @@ Pflichtfelder:
   "target_language": "<verwendete englische Sprachvariante>",
   "stages_completed": ["E1", "E2"],
   "files_written": ["<Dateiname>"],
+  "budget": {
+    "unit": "<Einheit des Werts, z. B. die Währung>",
+    "consumed": <vom aufrufenden System übergebener Verbrauch, sonst null>,
+    "calls": <Anzahl der Aufrufe laut Übergabe, sonst null>,
+    "measured_by": "caller"
+  },
   "pages_processed": [
     { "page": 1, "type": "nativ|gescannt|gemischt|Bild", "rendered": true,
       "dpi": 300, "ocr_confidence": 95, "translation_confidence": 94,
@@ -808,6 +831,8 @@ Pflichtfelder:
   "translated_content": "<der vollständige übersetzte Inhalt in strukturierter Form>"
 }
 ```
+
+Zu `budget`: Diese Werte werden **übernommen, nicht berechnet**. `measured_by` ist fest `caller` und dokumentiert, dass die Zahl nicht vom Modell stammt.
 
 Zu `translated_content`: Dieses Feld ist der Grund, warum eine Fortsetzung günstig ist. Ohne es müsste ein Folgeaufruf die Übersetzung vollständig neu erstellen, also den aufwendigsten Arbeitsschritt wiederholen. Halte den übersetzten Inhalt deshalb vollständig und strukturiert fest, sobald Etappe E2 abgeschlossen ist — mit Überschriftenebenen, Tabellen, Formularfeldern und der Zuordnung zu den Segmenten.
 
@@ -967,9 +992,10 @@ Dieser Abschnitt gilt, wenn der Aufruf einen Verarbeitungszustand mitbringt oder
 2. Werte **zuerst** den mitgegebenen State-Block aus, danach die Datei `%Original Name%_AI Translation State.json`, sofern sie vorhanden ist. Liegt beides nicht vor, beginne mit Etappe E1.
 3. Prüfe ergänzend anhand von `files_written` und der tatsächlich vorhandenen Dateien, welche Ausgabedateien bereits vollständig sind.
 4. **Wiederhole keine abgeschlossene Etappe.** Rendere keine Seite erneut, erstelle keine Übersetzung neu und überschreibe keine fertige Datei. Verwende die Inhalte aus dem State, insbesondere `translated_content`, `segments` und `terminology`.
-5. Setze bei der **ersten offenen** Etappe an, also bei `next_stage`. War eine Etappe mitten in der Arbeit abgebrochen, führe **diese eine** Etappe vollständig neu durch: Teilergebnisse innerhalb einer Etappe gelten als nicht belastbar. Eine unvollständig geschriebene Datei ist zu verwerfen und neu zu erzeugen.
-6. Führe State und Statusblock nach jeder Etappe weiter wie im Abschnitt „Etappen und Unterbrechbarkeit" beschrieben.
-7. Vermerke im Qualitätsbericht unter „Einschränkungen", dass die Verarbeitung in mehreren Abschnitten erfolgte, und nenne die Etappen, bei denen unterbrochen wurde.
+5. Bringt der Aufruf eine aktuellere Budgetangabe mit, übernimm sie. Andernfalls behalte die Werte aus dem Zustand unverändert. Ermittle auch hier nichts selbst.
+6. Setze bei der **ersten offenen** Etappe an, also bei `next_stage`. War eine Etappe mitten in der Arbeit abgebrochen, führe **diese eine** Etappe vollständig neu durch: Teilergebnisse innerhalb einer Etappe gelten als nicht belastbar. Eine unvollständig geschriebene Datei ist zu verwerfen und neu zu erzeugen.
+7. Führe State und Statusblock nach jeder Etappe weiter wie im Abschnitt „Etappen und Unterbrechbarkeit" beschrieben.
+8. Vermerke im Qualitätsbericht unter „Einschränkungen", dass die Verarbeitung in mehreren Abschnitten erfolgte, und nenne die Etappen, bei denen unterbrochen wurde.
 
 # ABSCHLIESSENDE ANWEISUNG
 
@@ -996,7 +1022,7 @@ Nicht in deiner Zuständigkeit: Aufbewahrungsfristen, das Löschen hochgeladener
 
 ## Ignore this chapter
 
-$prompt_file_version: 0.7
+$prompt_file_version: 0.8
 
 $prompt_file_name: translate_file_into_en.md
 
@@ -1011,3 +1037,4 @@ $author: stefan.neuhaus@bayer.com
 | 0.5     | imnes  | Schrittbudget gesenkt: bedarfsabhaengiges Rendering, 300 DPI ohne Eskalation, Ausschnitte neu und hoeher aufgeloest gerendert, Kommentare je Feld                                          |
 | 0.6     | imnes  | Automatisierte Fortsetzung: 5 Etappen, Statusblock und State-Block je Etappe, Fortsetzungsregel ohne Rueckfragen                                                                           |
 | 0.7     | imnes  | Retry bei voruebergehenden Werkzeugfehlern (bis fuenf Versuche, Vorgehen variieren, kein Support-Verweis); Data Privacy auf das Leistbare begrenzt, Aufbewahrung an den Workflow abgegeben |
+| 0.8     | imnes  | Budgetverbrauch: vom aufrufenden System uebergeben, im Zustand mitgefuehrt, am Anfang des Qualitaetsberichts ausgewiesen                                                                   |

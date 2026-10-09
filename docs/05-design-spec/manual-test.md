@@ -1,15 +1,15 @@
-# Manueller Test des Übersetzungs-Prompts 0.7
+# Manueller Test des Übersetzungs-Prompts 0.8
 
 Status: Draft
 Last reviewed: 2026-10-08
 
-Für wen: die Person, die Prompt 0.7 von Hand in myGenAssist durchspielt, bevor der n8n-Workflow gebaut wird.
+Für wen: die Person, die Prompt 0.8 von Hand in myGenAssist durchspielt, bevor der n8n-Workflow gebaut wird.
 
 Diese Anleitung beschreibt das Testen durch einen Menschen. Was der n8n-Workflow später automatisch tun muss, steht in [resume-loop.md](resume-loop.md).
 
 ## Was getestet wird
 
-Prompt 0.7 läuft in fünf Etappen und gibt nach jeder zwei Blöcke aus: einen Statusblock und einen State-Block. Erreicht die Verarbeitung das Schrittlimit, ist das **kein Fehler** — ein Folgeaufruf setzt dort an, wo es stehen geblieben ist.
+Prompt 0.8 läuft in fünf Etappen und gibt nach jeder zwei Blöcke aus: einen Statusblock und einen State-Block. Erreicht die Verarbeitung das Schrittlimit, ist das **kein Fehler** — ein Folgeaufruf setzt dort an, wo es stehen geblieben ist.
 
 | Etappe | Ergebnis am Ende |
 | ------ | ---------------------------------------------- |
@@ -34,7 +34,7 @@ Ziel des Tests: Am Ende liegen alle vier Ausgabedateien vor, und es wurde **nich
 
 Bereitlegen:
 
-- `docs/05-design-spec/promtpts for text recogniztion/prompt.en.0.7.md`
+- `docs/05-design-spec/promtpts for text recogniztion/prompt.en.0.8.md`
 - `test_input/001.pdf` (3 Seiten, französisch, teils handschriftlich)
 
 Beides wird als **Datei angehängt**. Die Promptdatei nicht in das Eingabefeld kopieren — sie ist über 1000 Zeilen lang und würde das Feld sprengen.
@@ -43,7 +43,7 @@ Sichere den Chatverlauf nach jedem Schritt, zum Beispiel durch Kopieren in eine 
 
 ## 2. Erster Aufruf
 
-Hänge `prompt.en.0.7.md` und `001.pdf` an und schicke als Nachricht:
+Hänge `prompt.en.0.8.md` und `001.pdf` an und schicke als Nachricht:
 
 ```text
 Process the attached PDF according to the attached prompt file.
@@ -102,7 +102,7 @@ Dies stellt den Aufruf nach, den n8n später macht.
 
 1. Kopiere aus der Antwort den **letzten vollständigen** State-Block — von `===AI-TRANSLATION-STATE===` bis `===END-STATE===`, beide Zeilen eingeschlossen.
 2. Öffne einen **neuen** Chat.
-3. Hänge `prompt.en.0.7.md` **und** `001.pdf` erneut an.
+3. Hänge `prompt.en.0.8.md` **und** `001.pdf` erneut an.
 4. Schicke als Nachricht:
 
    ```text
@@ -170,6 +170,22 @@ Im Referenzlauf sind das jeweils 19.
 - Prüfe in den Antworten nach einer Fortsetzung, ob Seiten erneut gerendert oder die Übersetzung neu erstellt wurde.
 
 Trifft das zu, hat die Fortsetzungsregel nicht gegriffen. Das ist der kritischste mögliche Befund: Die Verarbeitung käme zwar zum Ergebnis, aber die Automatisierung würde bei jedem Abbruch von vorn beginnen und wäre unwirtschaftlich.
+
+**Budgetangabe (ab 0.8)**
+
+Der Qualitätsbericht beginnt mit dem Block „Budgetverbrauch". Beim Handtest misst niemand — n8n gibt es noch nicht —, deshalb steht dort `nicht verfügbar`, und „Einschränkungen" wiederholt den Punkt. **Das ist der erwartete Befund, kein Fehler.**
+
+Der eigentliche Prüfpunkt ist das Gegenteil: Steht dort eine **Zahl**, ist das ein Befund gegen den Prompt. Dann hat das Modell geschätzt oder selbst gemessen — beides ist ihm untersagt. Prüfe in diesem Fall im Antworttext, ob es einen Werkzeugaufruf zur Budgetermittlung unternommen hat, und notiere es.
+
+Wer den Zahlenpfad trotzdem prüfen will, hängt an eine Fortsetzungsnachricht drei Zeilen an:
+
+```text
+budget_consumed: 0.42
+budget_unit: EUR
+budget_calls: 2
+```
+
+Erwartet: Der Bericht gibt exakt `0.42 EUR` aus — nicht gerundet, nicht umgerechnet, nicht „präzisiert" — mit dem Hinweis, dass der letzte Aufruf nicht enthalten ist. Im State-Block steht derselbe Wert mit `measured_by: "caller"`. Die Zahl erscheint **nicht** im Übersetzungsdokument, nicht auf der Präambelseite und nicht in der Markdown-Fassung.
 
 **Dokumentation**
 
