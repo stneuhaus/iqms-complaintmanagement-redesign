@@ -21,9 +21,20 @@ def should_skip(url: str) -> bool:
 
 
 def iter_markdown_files() -> list[Path]:
+    """Return all markdown files, skipping .git and "test_input" artefacts.
+
+    The CI runner may contain helper / test artefacts under test_input/ that
+    are not meant to be part of the documentation. Some of those may even have
+    names that look like markdown files but are actually directories used for
+    grouping test runs. To keep the link checker focused on real docs and avoid
+    crashes like "IsADirectoryError" when a path segment is a directory, we
+    explicitly skip anything under test_input/.
+    """
+
     files: list[Path] = []
     for path in ROOT.rglob("*.md"):
-        if ".git" in path.parts:
+        # Skip anything under .git or test_input directories.
+        if ".git" in path.parts or "test_input" in path.parts:
             continue
         files.append(path)
     return files
