@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail if relative Markdown links do not resolve to files in this repo."""
+"""Fail if relative Markdown links do not resolve to files in this repo. """
 
 from __future__ import annotations
 
