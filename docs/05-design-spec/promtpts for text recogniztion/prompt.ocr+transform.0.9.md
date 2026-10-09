@@ -105,13 +105,13 @@ Carry out the following phases in the order specified.
 
 This prompt is executed in an automated manner. Processing may end at any time at the step limit of the calling system. This is **not an error** but an anticipated state: a subsequent call continues the work. So that this works without loss, the ten phases are grouped into five stages.
 
-| Stage | Covers | Result at the end of the stage |
-| ------ | ------------- | ----------------------------------------------------- |
-| **E1** | Phases 1–2 | page count, text recognition, source classification |
-| **E2** | Phases 3–5 | complete translation, terminology list |
-| **E3** | Phase 6 | %Original Name%_Translated by AI.docx |
-| **E4** | — | %Original Name%_Translated by AI.md |
-| **E5** | Phases 7–10 | quality report and terminology CSV |
+| Stage        | Covers       | Result at the end of the stage                      |
+| ------------ | ------------ | --------------------------------------------------- |
+| **E1** | Phases 1–2  | page count, text recognition, source classification |
+| **E2** | Phases 3–5  | complete translation, terminology list              |
+| **E3** | Phase 6      | %Original Name%_Translated by AI.docx               |
+| **E4** | —           | %Original Name%_Translated by AI.md                 |
+| **E5** | Phases 7–10 | quality report and terminology CSV                  |
 
 Rules:
 
@@ -411,6 +411,7 @@ Preserve or reconstruct in particular:
 - heading hierarchy,
 - paragraphs,
 - indents,
+- text alignment: left-aligned, right-aligned, centered, or fully justified.
 - bullet characters,
 - numbering,
 - table structure,
@@ -870,22 +871,22 @@ This file is processed by machine in the downstream technical process in order t
 
 Reproduce the layout of the translation document as far as Markdown allows:
 
-| Element in the original | Equivalent in Markdown |
-| ------------------------------------------ | ---------------------------------------------------------------- |
-| Heading hierarchy | ATX headings `#`, `##`, `###` according to the level |
-| Paragraphs | separated by a blank line |
-| Tables | GFM pipe tables with a header row |
-| Merged cells, nested tables | GFM table as far as representable, otherwise HTML `<table>` |
-| Numbered lists | `1.`, `2.`, `3.` |
-| Bulleted lists | `-` |
-| Form fields | two-column table with the columns `Field` and `Value` |
-| Check boxes | `[x]` for checked, `[ ]` for not checked |
-| Bold type | `**Text**` |
-| Italics | `*Text*` |
-| Footnotes and endnotes | at the end of the corresponding section |
-| Images that cannot be reproduced | `[IMAGE]` followed by the translated image caption |
-| Stamps | `[STAMP: translated content]` |
-| Headers and footers | once at the beginning and end of the document respectively |
+| Element in the original          | Equivalent in Markdown                                       |
+| -------------------------------- | ------------------------------------------------------------ |
+| Heading hierarchy                | ATX headings`#`, `##`, `###` according to the level    |
+| Paragraphs                       | separated by a blank line                                    |
+| Tables                           | GFM pipe tables with a header row                            |
+| Merged cells, nested tables      | GFM table as far as representable, otherwise HTML`<table>` |
+| Numbered lists                   | `1.`, `2.`, `3.`                                       |
+| Bulleted lists                   | `-`                                                        |
+| Form fields                      | two-column table with the columns`Field` and `Value`     |
+| Check boxes                      | `[x]` for checked, `[ ]` for not checked                 |
+| Bold type                        | `**Text**`                                                 |
+| Italics                          | `*Text*`                                                   |
+| Footnotes and endnotes           | at the end of the corresponding section                      |
+| Images that cannot be reproduced | `[IMAGE]` followed by the translated image caption         |
+| Stamps                           | `[STAMP: translated content]`                              |
+| Headers and footers              | once at the beginning and end of the document respectively   |
 
 Supplementary rules:
 
@@ -1022,15 +1023,23 @@ Not within your responsibility: retention periods, the deletion of uploaded file
 
 ## Ignore this chapter
 
-Expected Input-File(s) for LLM:
+### Purpose:
+
+This prompt turns a non-English complaint attachment — machine-readable, scanned, or handwritten —
+into a complete English DOCX that reproduces the source layout, marks every handwritten and
+uncertain passage as such, and is accompanied by a Markdown version, a quality report and a
+terminology list. It is built for unattended use: the run is split into five resumable stages so a
+step-limit abort can be continued without repeating work, and every output carries an explicit,
+page-level confidence statement rather than an implied claim of correctness.
+
+### Expected Input-File(s) for LLM:
 
 - `%Original Name%.xxx` — the source document to be translated (mandatory)
 - `prompt.en.x.x.md` — this prompt file (mandatory)
 - a glossary or terminology list (optional; binding if supplied, see Phase 4)
 - `===AI-TRANSLATION-STATE===` block or `%Original Name%_AI Translation State.json` (only when continuing an interrupted run)
 
-
-Expected Output-File(s) by LLM:
+### Expected Output-File(s) by LLM:
 
 - `%Original Name%_Translated by AI.docx` — the translation including the preamble page (stage E3; `.html` only if DOCX is technically impossible)
 - `%Original Name%_Translated by AI.md` — Markdown version without preamble, for machine evaluation (stage E4)
@@ -1038,10 +1047,10 @@ Expected Output-File(s) by LLM:
 - `%Original Name%_AI Translation Used Terminology.csv` — terminology list (stage E5)
 - `%Original Name%_AI Translation State.json` — processing state; a working artifact, not a deliverable
 
-$prompt_file_version: 0.8
+### File Information
 
-$prompt_file_name: translate_file_into_en.md
-
+$prompt_file_version: 0.9
+$prompt_file_name: prompt.ocr+transform.x.x.md
 $author: stefan.neuhaus@bayer.com
 
 | version | author | comment                                                                                                                                                                             |
@@ -1054,3 +1063,4 @@ $author: stefan.neuhaus@bayer.com
 | 0.6     | imnes  | Automated continuation: 5 stages, status block and state block per stage, continuation rule without questions                                                                       |
 | 0.7     | imnes  | Retry on transient tool failures (up to five attempts, vary the approach, no support referral); data privacy limited to what the model can achieve, retention moved to the workflow |
 | 0.8     | imnes  | Budget consumption: passed by the calling system, carried in the state, reported at the beginning of the quality report                                                             |
+| 0.9     | imnes  | Phase 6: reconstruction of text allignement                                                                                                                                        |

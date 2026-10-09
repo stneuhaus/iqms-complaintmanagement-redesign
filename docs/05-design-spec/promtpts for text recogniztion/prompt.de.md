@@ -1022,6 +1022,21 @@ Nicht in deiner Zuständigkeit: Aufbewahrungsfristen, das Löschen hochgeladener
 
 ## Ignore this chapter
 
+Expected Input-File(s) for LLM:
+
+- `%Original Name%.pdf` — das zu übersetzende Quelldokument (verpflichtend)
+- `translate_file_into_en.md` — diese Promptdatei (verpflichtend)
+- ein Glossar oder eine Terminologieliste (optional; verbindlich, sofern mitgegeben, siehe Phase 4)
+- `===AI-TRANSLATION-STATE===`-Block oder `%Original Name%_AI Translation State.json` (nur bei Fortsetzung einer unterbrochenen Verarbeitung)
+
+Expected Output-File(s) by LLM:
+
+- `%Original Name%_Translated by AI.docx` — die Übersetzung einschließlich Präambelseite (Etappe E3; `.html` nur, wenn DOCX technisch nicht möglich ist)
+- `%Original Name%_Translated by AI.md` — Markdown-Fassung ohne Präambel, zur maschinellen Auswertung (Etappe E4)
+- `%Original Name%_AI Translation Quality Report.docx` — Qualitätsbericht (Etappe E5)
+- `%Original Name%_AI Translation Used Terminology.csv` — Terminologieliste (Etappe E5)
+- `%Original Name%_AI Translation State.json` — Verarbeitungszustand; Arbeitsartefakt, keine Lieferung
+
 $prompt_file_version: 0.8
 
 $prompt_file_name: translate_file_into_en.md
