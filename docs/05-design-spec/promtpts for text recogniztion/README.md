@@ -10,19 +10,21 @@ The prompt that drives OCR, translation and document generation for non-English 
 | File | Role |
 | --- | --- |
 | `prompt.de.md` | **German master.** Edited in place. All changes start here. |
-| `prompt.en.0.8.md` | Current English version — the one to use. |
-| `prompt.en.0.7.md`, `prompt.en.0.6.md`, `prompt.en.0.5.md`, `prompt.en.0.4.md` | Earlier English versions. Frozen. |
+| `prompt.ocr+transform.0.9.md` | Current English version — the one to use. |
+| `prompt.en.0.7.md`, `prompt.en.0.6.md`, `prompt.en.0.5.md`, `prompt.en.0.4.md` | Earlier English versions, under the former name `prompt.en.*.md`. Frozen. |
+
+From 0.9 the English file is named `prompt.ocr+transform.<version>.md`. The earlier `prompt.en.*.md` files keep their names — a released version is never renamed, because a test record referring to `prompt.en.0.7.md` must stay resolvable.
 
 ## Versioning rule
 
-**Every change to the English prompt creates a new file.** Never edit an existing `prompt.en.*.md`.
+**Every change to the English prompt creates a new file.** Never edit an existing released prompt file.
 
 A released version is immutable because it may already be in use — referenced by an n8n workflow, attached to a test run under `test_input/`, or cited in a test record. Editing it in place would silently change what those runs were based on, and a result could no longer be traced to the prompt that produced it.
 
 Workflow for a change:
 
 1. Edit `prompt.de.md` (the master).
-2. Copy the current English file to the next version number: `prompt.en.0.8.md` → `prompt.en.0.9.md`.
+2. Copy the current English file to the next version number: `prompt.ocr+transform.0.9.md` → `prompt.ocr+transform.0.10.md`. A new business feature increments the digit after the first dot (0.9 → 0.10); a pure bug fix keeps the number and appends `_bugfix` to the file name.
 3. Apply the same changes there.
 4. Set `$prompt_file_version` in **both** files and add one changelog row in each.
 5. Update the table above so the current version is unambiguous.

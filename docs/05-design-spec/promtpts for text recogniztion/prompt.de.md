@@ -411,6 +411,7 @@ Erhalte oder rekonstruiere insbesondere:
 - Überschriftenhierarchie,
 - Absätze,
 - Einzüge,
+- Textausrichtung: linksbündig, rechtsbündig, zentriert oder Blocksatz,
 - Aufzählungszeichen,
 - Nummerierungen,
 - Tabellenstruktur,
@@ -1022,14 +1023,18 @@ Nicht in deiner Zuständigkeit: Aufbewahrungsfristen, das Löschen hochgeladener
 
 ## Ignore this chapter
 
-Expected Input-File(s) for LLM:
+### Purpose:
 
-- `%Original Name%.pdf` — das zu übersetzende Quelldokument (verpflichtend)
-- `translate_file_into_en.md` — diese Promptdatei (verpflichtend)
+Dieser Prompt macht aus einem nicht-englischen Beschwerde-Anhang — maschinenlesbar, gescannt oder handschriftlich — ein vollständiges englisches DOCX, das das Layout der Quelle nachbildet, jede handschriftliche und unsichere Stelle als solche kennzeichnet und von einer Markdown-Fassung, einem Qualitätsbericht und einer Terminologieliste begleitet wird. Er ist für den unbeaufsichtigten Betrieb gebaut: Der Lauf ist in fünf fortsetzbare Etappen geteilt, sodass ein Abbruch am Schrittlimit ohne Doppelarbeit fortgesetzt werden kann, und jede Ausgabe trägt eine ausdrückliche, seitenbezogene Confidence-Angabe statt eines stillschweigenden Richtigkeitsanspruchs.
+
+### Expected Input-File(s) for LLM:
+
+- `%Original Name%.xxx` — das zu übersetzende Quelldokument (verpflichtend)
+- `prompt.ocr+transform.x.x.md` — diese Promptdatei (verpflichtend)
 - ein Glossar oder eine Terminologieliste (optional; verbindlich, sofern mitgegeben, siehe Phase 4)
 - `===AI-TRANSLATION-STATE===`-Block oder `%Original Name%_AI Translation State.json` (nur bei Fortsetzung einer unterbrochenen Verarbeitung)
 
-Expected Output-File(s) by LLM:
+### Expected Output-File(s) by LLM:
 
 - `%Original Name%_Translated by AI.docx` — die Übersetzung einschließlich Präambelseite (Etappe E3; `.html` nur, wenn DOCX technisch nicht möglich ist)
 - `%Original Name%_Translated by AI.md` — Markdown-Fassung ohne Präambel, zur maschinellen Auswertung (Etappe E4)
@@ -1037,10 +1042,10 @@ Expected Output-File(s) by LLM:
 - `%Original Name%_AI Translation Used Terminology.csv` — Terminologieliste (Etappe E5)
 - `%Original Name%_AI Translation State.json` — Verarbeitungszustand; Arbeitsartefakt, keine Lieferung
 
-$prompt_file_version: 0.8
+### File Information
 
-$prompt_file_name: translate_file_into_en.md
-
+$prompt_file_version: 0.9
+$prompt_file_name: prompt.ocr+transform.0.9.md
 $author: stefan.neuhaus@bayer.com
 
 | version | author | comment                                                                                                                                                                                    |
@@ -1053,3 +1058,4 @@ $author: stefan.neuhaus@bayer.com
 | 0.6     | imnes  | Automatisierte Fortsetzung: 5 Etappen, Statusblock und State-Block je Etappe, Fortsetzungsregel ohne Rueckfragen                                                                           |
 | 0.7     | imnes  | Retry bei voruebergehenden Werkzeugfehlern (bis fuenf Versuche, Vorgehen variieren, kein Support-Verweis); Data Privacy auf das Leistbare begrenzt, Aufbewahrung an den Workflow abgegeben |
 | 0.8     | imnes  | Budgetverbrauch: vom aufrufenden System uebergeben, im Zustand mitgefuehrt, am Anfang des Qualitaetsberichts ausgewiesen                                                                   |
+| 0.9     | imnes  | Phase 6: Rekonstruktion der Textausrichtung; Prompt umbenannt in prompt.ocr+transform.x.x.md, Purpose und Ein-/Ausgabedateiliste ergaenzt                                                  |

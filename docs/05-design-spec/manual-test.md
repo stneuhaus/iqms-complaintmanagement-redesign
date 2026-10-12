@@ -1,15 +1,15 @@
-# Manueller Test des Übersetzungs-Prompts 0.8
+# Manueller Test des Übersetzungs-Prompts 0.9
 
 Status: Draft
 Last reviewed: 2026-10-08
 
-Für wen: die Person, die Prompt 0.8 von Hand in myGenAssist durchspielt, bevor der n8n-Workflow gebaut wird.
+Für wen: die Person, die Prompt 0.9 von Hand in myGenAssist durchspielt, bevor der n8n-Workflow gebaut wird.
 
 Diese Anleitung beschreibt das Testen durch einen Menschen. Was der n8n-Workflow später automatisch tun muss, steht in [resume-loop.md](resume-loop.md).
 
 ## Was getestet wird
 
-Prompt 0.8 läuft in fünf Etappen und gibt nach jeder zwei Blöcke aus: einen Statusblock und einen State-Block. Erreicht die Verarbeitung das Schrittlimit, ist das **kein Fehler** — ein Folgeaufruf setzt dort an, wo es stehen geblieben ist.
+Prompt 0.9 läuft in fünf Etappen und gibt nach jeder zwei Blöcke aus: einen Statusblock und einen State-Block. Erreicht die Verarbeitung das Schrittlimit, ist das **kein Fehler** — ein Folgeaufruf setzt dort an, wo es stehen geblieben ist.
 
 | Etappe | Ergebnis am Ende |
 | ------ | ---------------------------------------------- |
@@ -34,7 +34,7 @@ Ziel des Tests: Am Ende liegen alle vier Ausgabedateien vor, und es wurde **nich
 
 Bereitlegen:
 
-- `docs/05-design-spec/promtpts for text recogniztion/prompt.en.0.8.md`
+- `docs/05-design-spec/promtpts for text recogniztion/prompt.ocr+transform.0.9.md`
 - `test_input/001.pdf` (3 Seiten, französisch, teils handschriftlich)
 
 Beides wird als **Datei angehängt**. Die Promptdatei nicht in das Eingabefeld kopieren — sie ist über 1000 Zeilen lang und würde das Feld sprengen.
@@ -43,7 +43,7 @@ Sichere den Chatverlauf nach jedem Schritt, zum Beispiel durch Kopieren in eine 
 
 ## 2. Erster Aufruf
 
-Hänge `prompt.en.0.8.md` und `001.pdf` an und schicke als Nachricht:
+Hänge `prompt.ocr+transform.0.9.md` und `001.pdf` an und schicke als Nachricht:
 
 ```text
 Process the attached PDF according to the attached prompt file.
@@ -102,7 +102,7 @@ Dies stellt den Aufruf nach, den n8n später macht.
 
 1. Kopiere aus der Antwort den **letzten vollständigen** State-Block — von `===AI-TRANSLATION-STATE===` bis `===END-STATE===`, beide Zeilen eingeschlossen.
 2. Öffne einen **neuen** Chat.
-3. Hänge `prompt.en.0.8.md` **und** `001.pdf` erneut an.
+3. Hänge `prompt.ocr+transform.0.9.md` **und** `001.pdf` erneut an.
 4. Schicke als Nachricht:
 
    ```text

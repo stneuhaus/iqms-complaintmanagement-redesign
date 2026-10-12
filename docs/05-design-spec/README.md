@@ -17,3 +17,4 @@ Exported workflow JSON belongs in `/workflows`, not in this file.
 | [promtpts for text recogniztion/](promtpts%20for%20text%20recogniztion/README.md) | Translation prompt — German master plus versioned English translations, and the rule that every English change becomes a new file |
 | [resume-loop.md](resume-loop.md) | What the **n8n workflow** must do so the translation prompt completes after a step-limit interruption |
 | [manual-test.md](manual-test.md) | How to run the same prompt **by hand** in myGenAssist, including what to do on an interruption |
+| [n8n/sandbox/](../../n8n/sandbox/README.md) | Sandbox draft of the n8n workflow driving the prompt from a SharePoint list, with setup instructions. Not yet validated against a live tenant. |

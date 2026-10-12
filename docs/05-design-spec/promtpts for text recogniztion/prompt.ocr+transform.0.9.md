@@ -411,7 +411,7 @@ Preserve or reconstruct in particular:
 - heading hierarchy,
 - paragraphs,
 - indents,
-- text alignment: left-aligned, right-aligned, centered, or fully justified.
+- text alignment: left-aligned, right-aligned, centered, or fully justified,
 - bullet characters,
 - numbering,
 - table structure,
@@ -873,13 +873,13 @@ Reproduce the layout of the translation document as far as Markdown allows:
 
 | Element in the original          | Equivalent in Markdown                                       |
 | -------------------------------- | ------------------------------------------------------------ |
-| Heading hierarchy                | ATX headings`#`, `##`, `###` according to the level    |
+| Heading hierarchy                | ATX headings `#`, `##`, `###` according to the level    |
 | Paragraphs                       | separated by a blank line                                    |
 | Tables                           | GFM pipe tables with a header row                            |
-| Merged cells, nested tables      | GFM table as far as representable, otherwise HTML`<table>` |
+| Merged cells, nested tables      | GFM table as far as representable, otherwise HTML `<table>` |
 | Numbered lists                   | `1.`, `2.`, `3.`                                       |
 | Bulleted lists                   | `-`                                                        |
-| Form fields                      | two-column table with the columns`Field` and `Value`     |
+| Form fields                      | two-column table with the columns `Field` and `Value`     |
 | Check boxes                      | `[x]` for checked, `[ ]` for not checked                 |
 | Bold type                        | `**Text**`                                                 |
 | Italics                          | `*Text*`                                                   |
@@ -1025,12 +1025,7 @@ Not within your responsibility: retention periods, the deletion of uploaded file
 
 ### Purpose:
 
-This prompt turns a non-English complaint attachment — machine-readable, scanned, or handwritten —
-into a complete English DOCX that reproduces the source layout, marks every handwritten and
-uncertain passage as such, and is accompanied by a Markdown version, a quality report and a
-terminology list. It is built for unattended use: the run is split into five resumable stages so a
-step-limit abort can be continued without repeating work, and every output carries an explicit,
-page-level confidence statement rather than an implied claim of correctness.
+This prompt turns a non-English complaint attachment — machine-readable, scanned, or handwritten — into a complete English DOCX that reproduces the source layout, marks every handwritten and uncertain passage as such, and is accompanied by a Markdown version, a quality report and a terminology list. It is built for unattended use: the run is split into five resumable stages so a step-limit abort can be continued without repeating work, and every output carries an explicit, page-level confidence statement rather than an implied claim of correctness.
 
 ### Expected Input-File(s) for LLM:
 
@@ -1050,7 +1045,7 @@ page-level confidence statement rather than an implied claim of correctness.
 ### File Information
 
 $prompt_file_version: 0.9
-$prompt_file_name: prompt.ocr+transform.x.x.md
+$prompt_file_name: prompt.ocr+transform.0.9.md
 $author: stefan.neuhaus@bayer.com
 
 | version | author | comment                                                                                                                                                                             |
@@ -1063,4 +1058,4 @@ $author: stefan.neuhaus@bayer.com
 | 0.6     | imnes  | Automated continuation: 5 stages, status block and state block per stage, continuation rule without questions                                                                       |
 | 0.7     | imnes  | Retry on transient tool failures (up to five attempts, vary the approach, no support referral); data privacy limited to what the model can achieve, retention moved to the workflow |
 | 0.8     | imnes  | Budget consumption: passed by the calling system, carried in the state, reported at the beginning of the quality report                                                             |
-| 0.9     | imnes  | Phase 6: reconstruction of text allignement                                                                                                                                        |
+| 0.9     | imnes  | Phase 6: reconstruction of text alignment; prompt renamed to prompt.ocr+transform.x.x.md, purpose and input/output file list added                                                  |

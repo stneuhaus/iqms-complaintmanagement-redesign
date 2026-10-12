@@ -9,7 +9,7 @@ To run the prompt by hand in myGenAssist instead — before the workflow exists 
 
 ## Why this document exists
 
-The translation prompt ([`promtpts for text recogniztion/prompt.en.0.8.md`](promtpts%20for%20text%20recogniztion/prompt.en.0.8.md), German master [`prompt.de.md`](promtpts%20for%20text%20recogniztion/prompt.de.md)) reliably hits the step limit of myGenAssist before a document is fully processed:
+The translation prompt ([`promtpts for text recogniztion/prompt.ocr+transform.0.9.md`](promtpts%20for%20text%20recogniztion/prompt.ocr+transform.0.9.md), German master [`prompt.de.md`](promtpts%20for%20text%20recogniztion/prompt.de.md)) reliably hits the step limit of myGenAssist before a document is fully processed:
 
 > The assistant stopped after reaching the maximum number of steps for this turn.
 
