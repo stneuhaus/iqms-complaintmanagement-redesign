@@ -1,0 +1,1557 @@
+{
+  "object": "complaint__v",
+  "label": "Complaint",
+  "source": {
+    "dns": "bayersbx-iqms-3-1-dev.veevavault.com",
+    "api_version": "v26.2"
+  },
+  "picklists": [
+    {
+      "picklist": "age_unit__v",
+      "used_by_fields": [
+        "age_unit__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "days__v",
+          "label": "Days"
+        },
+        {
+          "name": "weeks__v",
+          "label": "Weeks"
+        },
+        {
+          "name": "months__v",
+          "label": "Months"
+        },
+        {
+          "name": "years__v",
+          "label": "Years"
+        }
+      ]
+    },
+    {
+      "picklist": "classification_of_incident__v",
+      "used_by_fields": [
+        "ae_classification__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "death__v",
+          "label": "Death"
+        },
+        {
+          "name": "serious_injury__v",
+          "label": "Serious Injury (FDA)"
+        },
+        {
+          "name": "malfunction__v",
+          "label": "Malfunction (FDA)"
+        },
+        {
+          "name": "summary_report__v",
+          "label": "Summary Report (FDA)"
+        },
+        {
+          "name": "serious_public_health_threat__v",
+          "label": "Serious Public Health Threat (EU)"
+        },
+        {
+          "name": "unanticipated_serious_deterioration_in_s__v",
+          "label": "Unanticipated serious deterioration in state of health (EU)"
+        },
+        {
+          "name": "all_other_reportable_incidents__v",
+          "label": "All other reportable incidents (EU)"
+        }
+      ]
+    },
+    {
+      "picklist": "combination_product_type__c",
+      "used_by_fields": [
+        "combination_product_type__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "single_entity__c",
+          "label": "Single Entity"
+        },
+        {
+          "name": "copackaged__c",
+          "label": "Co-packaged"
+        },
+        {
+          "name": "crosslabelled__c",
+          "label": "Cross-labelled"
+        }
+      ]
+    },
+    {
+      "picklist": "complainant_type__v",
+      "used_by_fields": [
+        "complainant_type__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "consumer__v",
+          "label": "Consumer"
+        },
+        {
+          "name": "health_professional__v",
+          "label": "Health professional"
+        },
+        {
+          "name": "other__v",
+          "label": "Other"
+        }
+      ]
+    },
+    {
+      "picklist": "complaint_type__c",
+      "used_by_fields": [
+        "complaint_type__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "external__c",
+          "label": "External"
+        },
+        {
+          "name": "external_non_bayer_product__c",
+          "label": "External - Non - Bayer Product"
+        }
+      ]
+    },
+    {
+      "picklist": "complaint_type__v",
+      "used_by_fields": [
+        "type__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "packaging__v",
+          "label": "Packaging"
+        },
+        {
+          "name": "product_quality__v",
+          "label": "Product Quality"
+        },
+        {
+          "name": "labeling__v",
+          "label": "Labeling"
+        }
+      ]
+    },
+    {
+      "picklist": "conclusion__c",
+      "used_by_fields": [
+        "conclusion__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "unconfirmed_quality_defect__c",
+          "label": "Unconfirmed Quality Defect"
+        },
+        {
+          "name": "confirmed_quality_defect__c",
+          "label": "Confirmed Quality Defect"
+        },
+        {
+          "name": "unconfirmed_quality_defect_but_plausib__c",
+          "label": "Unconfirmed Quality Defect - but Plausible"
+        },
+        {
+          "name": "counterfeit_no_example_option__c",
+          "label": "Confirmed Falsification from Unknown Source"
+        },
+        {
+          "name": "confirmed_falsification_in_illegal_suppl__c",
+          "label": "Confirmed Falsification in Illegal Supply Chain"
+        },
+        {
+          "name": "confirmed_falsification_in_regular_suppl__c",
+          "label": "Confirmed Falsification in Regular Supply Chain"
+        },
+        {
+          "name": "confirmed_falsification_diversion_from__c",
+          "label": "Confirmed Falsification - Diversion from Unknown Source"
+        },
+        {
+          "name": "confirmed_falsification_diversion_in_i__c",
+          "label": "Confirmed Falsification - Diversion in Illegal Supply Chain"
+        },
+        {
+          "name": "confirmed_falsification_diversion_in_r__c",
+          "label": "Confirmed Falsification - Diversion in Regular Supply Chain"
+        },
+        {
+          "name": "confirmed_falsification_theft_from_unk__c",
+          "label": "Confirmed Falsification - Theft from Unknown Source"
+        },
+        {
+          "name": "confirmed_falsification_theft_in_illeg__c",
+          "label": "Confirmed Falsification - Theft in Illegal Supply Chain"
+        },
+        {
+          "name": "confirmed_falsification_theft_in_regul__c",
+          "label": "Confirmed Falsification - Theft in Regular Supply Chain"
+        },
+        {
+          "name": "confirmed_counterfeit_fraudulent_generi__c",
+          "label": "Confirmed Counterfeit (Fraudulent Generic) from Unknown Source"
+        },
+        {
+          "name": "confirmed_counterfeit_fraudulent_generi1__c",
+          "label": "Confirmed Counterfeit (Fraudulent Generic) in Illegal Supply Chain"
+        },
+        {
+          "name": "confirmed_counterfeit_fraudulent_generi2__c",
+          "label": "Confirmed Counterfeit (Fraudulent Generic) in Regular Supply Chain"
+        },
+        {
+          "name": "confirmed_counterfeit_trademark_violati__c",
+          "label": "Confirmed Counterfeit (Trademark Violation)​"
+        }
+      ]
+    },
+    {
+      "picklist": "conclusion_on_complaint_description__c",
+      "used_by_fields": [
+        "conclusion_on_complaint_description__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "justified__c",
+          "label": "Justified"
+        },
+        {
+          "name": "not_justified__c",
+          "label": "Not Justified"
+        }
+      ]
+    },
+    {
+      "picklist": "contact_method__v",
+      "used_by_fields": [
+        "initial_contact_method__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "email__v",
+          "label": "Email"
+        },
+        {
+          "name": "fax__v",
+          "label": "Fax"
+        },
+        {
+          "name": "mail__v",
+          "label": "Mail"
+        },
+        {
+          "name": "phone__v",
+          "label": "Phone"
+        },
+        {
+          "name": "website__v",
+          "label": "Website"
+        }
+      ]
+    },
+    {
+      "picklist": "default_status__v",
+      "used_by_fields": [
+        "status__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "active__v",
+          "label": "Active"
+        },
+        {
+          "name": "inactive__v",
+          "label": "Inactive"
+        }
+      ]
+    },
+    {
+      "picklist": "division__c",
+      "used_by_fields": [
+        "division__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "pharma__c",
+          "label": "Pharma"
+        },
+        {
+          "name": "consumer_health__c",
+          "label": "Consumer Health"
+        },
+        {
+          "name": "radiology__c",
+          "label": "Radiology"
+        }
+      ]
+    },
+    {
+      "picklist": "ethnicity__v",
+      "used_by_fields": [
+        "ethnicity__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "hispanic__v",
+          "label": "Hispanic"
+        },
+        {
+          "name": "not_hispanic__v",
+          "label": "Not Hispanic"
+        }
+      ]
+    },
+    {
+      "picklist": "extent_of_defect__c",
+      "used_by_fields": [
+        "extent_of_defect__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "no_defect__c",
+          "label": "No Defect"
+        },
+        {
+          "name": "no_assessment__c",
+          "label": "No Assessment"
+        },
+        {
+          "name": "isolated_incident__c",
+          "label": "Isolated Incident"
+        },
+        {
+          "name": "batch_affected__c",
+          "label": "Batch Affected"
+        },
+        {
+          "name": "more_than_one_product_formula_affected__c",
+          "label": "More than One Product / Formula Affected"
+        },
+        {
+          "name": "several_units_within_the_batch_affected__c",
+          "label": "Several Units within the Batch Affected"
+        },
+        {
+          "name": "product_affected__c",
+          "label": "Product Affected"
+        },
+        {
+          "name": "more_than_one_batch_affected__c",
+          "label": "More than One Batch Affected"
+        },
+        {
+          "name": "packaging_order_of_batch_affected__c",
+          "label": "Packaging Order of Batch Affected"
+        },
+        {
+          "name": "bulk_batch_affected__c",
+          "label": "Bulk Batch Affected"
+        }
+      ]
+    },
+    {
+      "picklist": "external_system_type__c",
+      "used_by_fields": [
+        "external_system_type__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "engage__c",
+          "label": "Engage"
+        },
+        {
+          "name": "safetrack__c",
+          "label": "Safetrack"
+        },
+        {
+          "name": "other__c",
+          "label": "Other"
+        }
+      ]
+    },
+    {
+      "picklist": "feedback_type__c",
+      "used_by_fields": [
+        "feedback_type__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "complaint__c",
+          "label": "Complaint"
+        },
+        {
+          "name": "suspected_counterfeit_falsification__c",
+          "label": "Suspected Counterfeit / Falsification"
+        },
+        {
+          "name": "use_error__c",
+          "label": "Use Error"
+        },
+        {
+          "name": "csi__c",
+          "label": "Customer Satisfaction Issue"
+        },
+        {
+          "name": "documentation__c",
+          "label": "Documentation"
+        }
+      ]
+    },
+    {
+      "picklist": "function__c",
+      "used_by_fields": [
+        "gbs__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "global_business_services_costa_rica__c",
+          "label": "Global Business Services Costa Rica"
+        },
+        {
+          "name": "global_business_services_dalian__c",
+          "label": "Global Business Services Dalian"
+        },
+        {
+          "name": "global_business_services_gdansk__c",
+          "label": "Global Business Services Gdansk"
+        }
+      ]
+    },
+    {
+      "picklist": "gender__v",
+      "used_by_fields": [
+        "gender__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "male__v",
+          "label": "Male"
+        },
+        {
+          "name": "female__v",
+          "label": "Female"
+        },
+        {
+          "name": "transgender__v",
+          "label": "Transgender (FDA)"
+        },
+        {
+          "name": "intersex__v",
+          "label": "Intersex (FDA)"
+        },
+        {
+          "name": "prefer_not_to_disclose__v",
+          "label": "Prefer Not to Disclose (FDA)"
+        },
+        {
+          "name": "unknown__v",
+          "label": "Unknown (EU)"
+        },
+        {
+          "name": "not_applicable__v",
+          "label": "Not applicable (EU)"
+        },
+        {
+          "name": "ftm__v",
+          "label": "Transgender man/trans man/female-to-male (FTM)"
+        },
+        {
+          "name": "mtf__v",
+          "label": "Transgender woman/trans woman/male-to-female (MTF)"
+        },
+        {
+          "name": "other__v",
+          "label": "Other gender category"
+        },
+        {
+          "name": "decline_to_answer__v",
+          "label": "Decline to answer"
+        }
+      ]
+    },
+    {
+      "picklist": "impact__v",
+      "used_by_fields": [
+        "initial_risk_classification__c",
+        "rating__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "high__v",
+          "label": "High"
+        },
+        {
+          "name": "medium__v",
+          "label": "Medium"
+        },
+        {
+          "name": "low__v",
+          "label": "Low"
+        },
+        {
+          "name": "critical__v",
+          "label": "Critical"
+        },
+        {
+          "name": "systemic_major__c",
+          "label": "Systemic Major"
+        },
+        {
+          "name": "major__v",
+          "label": "Major"
+        },
+        {
+          "name": "minor__v",
+          "label": "Minor"
+        },
+        {
+          "name": "nonjustified__c",
+          "label": "Non-justified"
+        },
+        {
+          "name": "none__c",
+          "label": "None"
+        }
+      ]
+    },
+    {
+      "picklist": "incident_location__v",
+      "used_by_fields": [
+        "incident_location__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "ambulatory_surgical_facility__v",
+          "label": "Ambulatory Surgical Facility"
+        },
+        {
+          "name": "home__v",
+          "label": "Home"
+        },
+        {
+          "name": "hospital__v",
+          "label": "Hospital"
+        },
+        {
+          "name": "outpatient_treatment_facility__v",
+          "label": "Outpatient Treatment Facility"
+        },
+        {
+          "name": "outpatient_diagnostic_facility__v",
+          "label": "Outpatient Diagnostic Facility"
+        },
+        {
+          "name": "nursing_home__v",
+          "label": "Nursing Home"
+        },
+        {
+          "name": "other__v",
+          "label": "Other"
+        }
+      ]
+    },
+    {
+      "picklist": "initial_reporter_role__v",
+      "used_by_fields": [
+        "initial_reporter_role__v",
+        "reporter_type__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "physician__c",
+          "label": "Physician"
+        },
+        {
+          "name": "patient__v",
+          "label": "Consumer"
+        },
+        {
+          "name": "healthcare_professional__v",
+          "label": "Other Health Professional"
+        },
+        {
+          "name": "pharmacist__c",
+          "label": "Pharmacist"
+        },
+        {
+          "name": "nonhealth_professional__c",
+          "label": "Non-Health Professional"
+        },
+        {
+          "name": "family_member__c",
+          "label": "Family Member"
+        },
+        {
+          "name": "bayer_distributor__c",
+          "label": "Bayer Distributor"
+        },
+        {
+          "name": "bayer_employee__c",
+          "label": "Bayer Employee"
+        },
+        {
+          "name": "bayer_site__c",
+          "label": "Bayer Site"
+        },
+        {
+          "name": "bayer_warehouse__c",
+          "label": "Bayer Warehouse"
+        },
+        {
+          "name": "cmo__c",
+          "label": "CMO"
+        },
+        {
+          "name": "investigator__c",
+          "label": "Investigator"
+        },
+        {
+          "name": "licenseelicensor__c",
+          "label": "Licensee/Licensor"
+        },
+        {
+          "name": "lawyer__c",
+          "label": "Lawyer"
+        },
+        {
+          "name": "nonbayer_distributor__c",
+          "label": "Non-Bayer Distributor"
+        },
+        {
+          "name": "regulatory_authority__c",
+          "label": "Regulatory Authority"
+        },
+        {
+          "name": "wholesaler__c",
+          "label": "Wholesaler"
+        },
+        {
+          "name": "lay_user__v",
+          "label": "Other"
+        }
+      ]
+    },
+    {
+      "picklist": "issue_category__c",
+      "used_by_fields": [
+        "issue_category__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "design_control_design_control__c",
+          "label": "Design Control - Design Control"
+        },
+        {
+          "name": "manufacturing_laboratory_controls_issues__c",
+          "label": "Manufacturing Laboratory Controls Issues - Manufacturing Laboratory Controls Issue"
+        },
+        {
+          "name": "manufacturing_laboratory_controls_issue1__c",
+          "label": "Manufacturing Laboratory Controls Issues - Out of specification Test Results for Product Stability"
+        },
+        {
+          "name": "manufacturing_laboratory_controls_issue2__c",
+          "label": "Manufacturing Laboratory Controls Issues - Out of specification Test Results for Product Release"
+        },
+        {
+          "name": "other_logistics__c",
+          "label": "Other - Logistics"
+        },
+        {
+          "name": "other_other__c",
+          "label": "Other - Other"
+        },
+        {
+          "name": "product_contamination_and_sterility_issu__c",
+          "label": "Product Contamination and Sterility Issues - Product Contamination Chemical"
+        },
+        {
+          "name": "product_contamination_and_sterility_iss1__c",
+          "label": "Product Contamination and Sterility Issues - Product Contamination Microbial"
+        },
+        {
+          "name": "product_contamination_and_sterility_iss2__c",
+          "label": "Product Contamination and Sterility Issues - Product Contamination Physical"
+        },
+        {
+          "name": "product_contamination_and_sterility_iss3__c",
+          "label": "Product Contamination and Sterility Issues - Product Contamination with Body Fluid"
+        },
+        {
+          "name": "product_contamination_and_sterility_iss4__c",
+          "label": "Product Contamination and Sterility Issues - Product Sterility Lacking"
+        },
+        {
+          "name": "product_contamination_and_sterility_iss5__c",
+          "label": "Product Contamination and Sterility Issues - Suspected Transmission of an Infectious Agent via Product"
+        },
+        {
+          "name": "product_installation_issues_incorrect__c",
+          "label": "Product Installation Issues – Incorrect Installation / Setting"
+        },
+        {
+          "name": "product_label_issues_physical_product__c",
+          "label": "Product Label Issues - Physical Product Label"
+        },
+        {
+          "name": "product_label_issues_product_barcode_i__c",
+          "label": "Product Label Issues - Product Barcode Issue"
+        },
+        {
+          "name": "product_label_issues_product_expiratio__c",
+          "label": "Product Label Issues - Product Expiration Date Issue"
+        },
+        {
+          "name": "product_label_issues_product_expiratio1__c",
+          "label": "Product Label Issues - Product Expiration Date and Lot Number Issue"
+        },
+        {
+          "name": "product_label_issues_product_identific__c",
+          "label": "Product Label Issues - Product Identification Number Issue"
+        },
+        {
+          "name": "product_label_issues_product_label_iss__c",
+          "label": "Product Label Issues - Product Label Issue"
+        },
+        {
+          "name": "product_label_issues_product_label_on__c",
+          "label": "Product Label Issues - Product Label on Wrong Product"
+        },
+        {
+          "name": "product_label_issues_product_lot_numbe__c",
+          "label": "Product Label Issues - Product Lot Number Issue"
+        },
+        {
+          "name": "product_manufacturing_issues_incorrect__c",
+          "label": "Product Manufacturing Issues – Incorrect Assembly"
+        },
+        {
+          "name": "product_manufacturing_issues_molding_p__c",
+          "label": "Product Manufacturing Issues – Molding Process"
+        },
+        {
+          "name": "product_packaging_issues_product_blist__c",
+          "label": "Product Packaging Issues - Product Blister Packaging Issue"
+        },
+        {
+          "name": "product_packaging_issues_product_closu__c",
+          "label": "Product Packaging Issues - Product Closure Issue"
+        },
+        {
+          "name": "product_packaging_issues_product_commi__c",
+          "label": "Product Packaging Issues - Product Commingling"
+        },
+        {
+          "name": "product_packaging_issues_product_conta__c",
+          "label": "Product Packaging Issues - Product Container Issue"
+        },
+        {
+          "name": "product_packaging_issues_product_conta1__c",
+          "label": "Product Packaging Issues - Product Container Seal Issue"
+        },
+        {
+          "name": "product_packaging_issues_product_dropp__c",
+          "label": "Product Packaging Issues - Product Dropper Issue"
+        },
+        {
+          "name": "product_packaging_issues_product_leafl__c",
+          "label": "Product Packaging Issues - Product Leaflet Issues"
+        },
+        {
+          "name": "product_packaging_issues_product_outer__c",
+          "label": "Product Packaging Issues - Product Outer Packaging Issue"
+        },
+        {
+          "name": "product_packaging_issues_product_packa__c",
+          "label": "Product Packaging Issues - Product Packaging Issue"
+        },
+        {
+          "name": "product_packaging_issues_product_packa1__c",
+          "label": "Product Packaging Issues - Product Packaging Quantity Issue"
+        },
+        {
+          "name": "product_physical_issues_product_coatin__c",
+          "label": "Product Physical Issues - Product Coating Issue"
+        },
+        {
+          "name": "product_physical_issues_product_deposi__c",
+          "label": "Product Physical Issues - Product Deposit"
+        },
+        {
+          "name": "product_physical_issues_product_dosage__c",
+          "label": "Product Physical Issues - Product Dosage Form Issue"
+        },
+        {
+          "name": "product_physical_issues_product_gel_fo__c",
+          "label": "Product Physical Issues - Product Gel Formation"
+        },
+        {
+          "name": "product_physical_issues_product_physic__c",
+          "label": "Product Physical Issues - Product Physical Issue"
+        },
+        {
+          "name": "regulatory_compliance_regulatory_compl__c",
+          "label": "Regulatory Compliance - Regulatory Compliance"
+        }
+      ]
+    },
+    {
+      "picklist": "occupation__v",
+      "used_by_fields": [
+        "reporter_occupation__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "administrator_supervisor__v",
+          "label": "Administrator / Supervisor"
+        },
+        {
+          "name": "biomedical_engineer__v",
+          "label": "Biomedical Engineer"
+        },
+        {
+          "name": "dentist__v",
+          "label": "Dentist"
+        },
+        {
+          "name": "nurse__v",
+          "label": "Nurse"
+        },
+        {
+          "name": "nurse_practitioner__v",
+          "label": "Nurse Practitioner"
+        },
+        {
+          "name": "nonhealthcare_professional__v",
+          "label": "Non-Healthcare Professional"
+        },
+        {
+          "name": "other_healthcare_professional__v",
+          "label": "Other Healthcare Professional"
+        },
+        {
+          "name": "pharmacist__v",
+          "label": "Pharmacist"
+        },
+        {
+          "name": "physician__v",
+          "label": "Physician"
+        },
+        {
+          "name": "physician_assistant__v",
+          "label": "Physician Assistant"
+        },
+        {
+          "name": "third_party_servicer__v",
+          "label": "Third Party Servicer"
+        },
+        {
+          "name": "risk_manager__v",
+          "label": "Risk Manager"
+        }
+      ]
+    },
+    {
+      "picklist": "origin_of_issue_or_defect__c",
+      "used_by_fields": [
+        "origin_of_issue_or_defect__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "consumer__c",
+          "label": "Consumer"
+        },
+        {
+          "name": "customer__c",
+          "label": "Customer"
+        },
+        {
+          "name": "packaging_site__c",
+          "label": "Packaging Site"
+        },
+        {
+          "name": "manufacturing_site__c",
+          "label": "Manufacturing Site"
+        },
+        {
+          "name": "contract_manufacturer__c",
+          "label": "Contract Manufacturer"
+        },
+        {
+          "name": "supplier__c",
+          "label": "Supplier"
+        },
+        {
+          "name": "healthcare_professional__c",
+          "label": "Healthcare Professional"
+        },
+        {
+          "name": "regulatory_affairs__c",
+          "label": "Regulatory Affairs"
+        },
+        {
+          "name": "warehouse__c",
+          "label": "Warehouse"
+        },
+        {
+          "name": "quality_unit__c",
+          "label": "Quality Unit"
+        },
+        {
+          "name": "change_management__c",
+          "label": "Change Management"
+        },
+        {
+          "name": "product_design__c",
+          "label": "Product Design"
+        },
+        {
+          "name": "it__c",
+          "label": "IT"
+        },
+        {
+          "name": "ecommerce__c",
+          "label": "e-commerce"
+        },
+        {
+          "name": "not_clear__c",
+          "label": "Not clear"
+        },
+        {
+          "name": "none__c",
+          "label": "None"
+        }
+      ]
+    },
+    {
+      "picklist": "outcomes__v",
+      "used_by_fields": [
+        "adverse_event_outcomes__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "adverse_event__c",
+          "label": "Adverse Event / Adverse Reaction"
+        },
+        {
+          "name": "other_special_circumstance__c",
+          "label": "Other Special Circumstance"
+        },
+        {
+          "name": "lack_of_effect__c",
+          "label": "Lack of Effect"
+        },
+        {
+          "name": "lifethreatening__v",
+          "label": "Pregnancy"
+        },
+        {
+          "name": "hospitalization__v",
+          "label": "Pain"
+        },
+        {
+          "name": "serious_incident__c",
+          "label": "Serious Incident"
+        },
+        {
+          "name": "nonserious_incident__c",
+          "label": "Non-Serious Incident"
+        },
+        {
+          "name": "air_injection__c",
+          "label": "Air Injection"
+        },
+        {
+          "name": "aspiration__c",
+          "label": "Aspiration"
+        },
+        {
+          "name": "extravasation__c",
+          "label": "Extravasation"
+        },
+        {
+          "name": "injury__c",
+          "label": "Injury"
+        },
+        {
+          "name": "static_shock__c",
+          "label": "Static / Shock"
+        },
+        {
+          "name": "death__v",
+          "label": "Death"
+        },
+        {
+          "name": "other_serious_or_important_medical_event__v",
+          "label": "Heavy Menstrual Bleeding"
+        },
+        {
+          "name": "required_intervention__v",
+          "label": "Dislocation"
+        },
+        {
+          "name": "disability_or_permanent_damage__v",
+          "label": "Expulsion"
+        },
+        {
+          "name": "congenital_anomaly_birth_defect__v",
+          "label": "Perforation"
+        },
+        {
+          "name": "procedural_pain_and_bleeding__c",
+          "label": "Procedural Pain and Bleeding"
+        },
+        {
+          "name": "ui_uecsi__c",
+          "label": "Removal"
+        },
+        {
+          "name": "spasm__c",
+          "label": "Spasm"
+        }
+      ]
+    },
+    {
+      "picklist": "patient_sex__v",
+      "used_by_fields": [
+        "patient_sex__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "male__v",
+          "label": "Male"
+        },
+        {
+          "name": "female__v",
+          "label": "Female"
+        },
+        {
+          "name": "undifferentiated__v",
+          "label": "Undifferentiated"
+        },
+        {
+          "name": "decline_to_answer__v",
+          "label": "Decline to answer"
+        }
+      ]
+    },
+    {
+      "picklist": "pharma_severity__v",
+      "used_by_fields": [
+        "severity__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "minor__v",
+          "label": "Minor"
+        },
+        {
+          "name": "major__v",
+          "label": "Major"
+        },
+        {
+          "name": "critical__v",
+          "label": "Critical"
+        }
+      ]
+    },
+    {
+      "picklist": "probability__v",
+      "used_by_fields": [
+        "probability__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "low__v",
+          "label": "Low"
+        },
+        {
+          "name": "medium__v",
+          "label": "Medium"
+        },
+        {
+          "name": "high__v",
+          "label": "High"
+        }
+      ]
+    },
+    {
+      "picklist": "product_type1__c",
+      "used_by_fields": [
+        "product_type__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "drugmedicinal_product__c",
+          "label": "Drug/Medicinal Product"
+        },
+        {
+          "name": "combination_product__c",
+          "label": "Combination Product"
+        },
+        {
+          "name": "medical_device__c",
+          "label": "Medical Device"
+        },
+        {
+          "name": "food_supplement__c",
+          "label": "Food Supplement"
+        },
+        {
+          "name": "cosmetics__c",
+          "label": "Cosmetics"
+        },
+        {
+          "name": "active_pharmaceutical_ingredients__c",
+          "label": "API/ Raw Material/ Excipient/ Ingredient"
+        },
+        {
+          "name": "unknown__c",
+          "label": "Other"
+        }
+      ]
+    },
+    {
+      "picklist": "race__v",
+      "used_by_fields": [
+        "race__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "asian__v",
+          "label": "Asian"
+        },
+        {
+          "name": "american_indian_or_alaskan_native__v",
+          "label": "American Indian or Alaskan Native"
+        },
+        {
+          "name": "black_or_african_american__v",
+          "label": "Black or African American"
+        },
+        {
+          "name": "native_hawaiian_or_other_pacific_islande__v",
+          "label": "Native Hawaiian or Other Pacific Islander"
+        },
+        {
+          "name": "white__v",
+          "label": "White"
+        }
+      ]
+    },
+    {
+      "picklist": "rationale_for_abbreviated_workflow__c",
+      "used_by_fields": [
+        "rationale_for_abbreviated_workflow__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "legal_manufacturer_informed__c",
+          "label": "Legal Manufacturer Informed"
+        },
+        {
+          "name": "low_risk_products__c",
+          "label": "Low Risk Products"
+        },
+        {
+          "name": "minor_defects__c",
+          "label": "Minor Defects"
+        },
+        {
+          "name": "no_batch_sample_and_photo_available__c",
+          "label": "No Batch, Sample, and Photo available"
+        }
+      ]
+    },
+    {
+      "picklist": "rationale_for_local_closure__c",
+      "used_by_fields": [
+        "rationale_for_local_closure__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "no_batch__c",
+          "label": "No Batch, Sample, and Photo available"
+        },
+        {
+          "name": "use_error__c",
+          "label": "Use Error"
+        },
+        {
+          "name": "customer_satisfaction_issue__c",
+          "label": "Customer Satisfaction Issue"
+        },
+        {
+          "name": "per_guidance_document__c",
+          "label": "Per Guidance Document"
+        },
+        {
+          "name": "batchproduct_information_only__c",
+          "label": "Batch/Product Information only"
+        },
+        {
+          "name": "marketing_cases1__c",
+          "label": "Marketing Cases"
+        },
+        {
+          "name": "documentation__c",
+          "label": "Documentation"
+        },
+        {
+          "name": "legal_manufacturer_informed__c",
+          "label": "Legal Manufacturer Informed"
+        }
+      ]
+    },
+    {
+      "picklist": "report_source__c",
+      "used_by_fields": [
+        "report_source__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "spontaneous__c",
+          "label": "Spontaneous"
+        },
+        {
+          "name": "marketing_study__c",
+          "label": "Marketing Study"
+        },
+        {
+          "name": "study__c",
+          "label": "Clinical Study (Phase I-III)"
+        },
+        {
+          "name": "service__c",
+          "label": "Service"
+        },
+        {
+          "name": "ecommerce__c",
+          "label": "E-commerce"
+        },
+        {
+          "name": "social_media__c",
+          "label": "Social Media"
+        },
+        {
+          "name": "literature__c",
+          "label": "Literature"
+        },
+        {
+          "name": "replacementrepayment__c",
+          "label": "Replacement / Repayment"
+        },
+        {
+          "name": "request_for_confirmation_of_quality__c",
+          "label": "Request for Confirmation of Quality"
+        },
+        {
+          "name": "litigation__c",
+          "label": "Litigation"
+        },
+        {
+          "name": "other__c",
+          "label": "Other"
+        }
+      ]
+    },
+    {
+      "picklist": "service_organization__c",
+      "used_by_fields": [
+        "service_organization__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "bayer_service__c",
+          "label": "Bayer Service"
+        },
+        {
+          "name": "3rd_party_service__c",
+          "label": "3rd Party Service"
+        }
+      ]
+    },
+    {
+      "picklist": "severity__v",
+      "used_by_fields": [
+        "ae_severity__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "public_health_threat__v",
+          "label": "Public Health Threat"
+        },
+        {
+          "name": "death__v",
+          "label": "Death"
+        },
+        {
+          "name": "serious_injury__v",
+          "label": "Serious Injury"
+        },
+        {
+          "name": "product_malfunction_problem__v",
+          "label": "Product Malfunction / Problem"
+        }
+      ]
+    },
+    {
+      "picklist": "severity_category__c",
+      "used_by_fields": [
+        "severity_category__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "severity_i__c",
+          "label": "Severity I"
+        },
+        {
+          "name": "severity_ii__c",
+          "label": "Severity II"
+        },
+        {
+          "name": "severity_iii__c",
+          "label": "Severity III"
+        },
+        {
+          "name": "severity_iv__c",
+          "label": "Severity IV"
+        },
+        {
+          "name": "severity_v__c",
+          "label": "Severity V"
+        },
+        {
+          "name": "not_applicable__c",
+          "label": "Not Applicable"
+        }
+      ]
+    },
+    {
+      "picklist": "symptom_code__v",
+      "used_by_fields": [
+        "symptom_code__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "abrasion__c",
+          "label": "Abrasion"
+        },
+        {
+          "name": "contusion__c",
+          "label": "Contusion"
+        },
+        {
+          "name": "edema__c",
+          "label": "Edema"
+        },
+        {
+          "name": "rash__c",
+          "label": "Rash"
+        }
+      ]
+    },
+    {
+      "picklist": "timeline__c",
+      "used_by_fields": [
+        "timeline__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "standard_timeline__c",
+          "label": "Standard Timeline"
+        },
+        {
+          "name": "nonstandard_timeline__c",
+          "label": "Non-Standard Timeline"
+        }
+      ]
+    },
+    {
+      "picklist": "unknown_batch_serial_number__c",
+      "used_by_fields": [
+        "unknown_batch_serial_number__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "known_batch__c",
+          "label": "Known Batch"
+        },
+        {
+          "name": "unknown_batch__c",
+          "label": "Unknown Batch / Serial Number"
+        },
+        {
+          "name": "known_serial_number__c",
+          "label": "Known Serial Number"
+        },
+        {
+          "name": "na__c",
+          "label": "N/A"
+        }
+      ]
+    },
+    {
+      "picklist": "weight_unit__v",
+      "used_by_fields": [
+        "weight_unit__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "lb__v",
+          "label": "lb"
+        },
+        {
+          "name": "kg__v",
+          "label": "kg"
+        }
+      ]
+    },
+    {
+      "picklist": "why_physical_sample_is_not_available__c",
+      "used_by_fields": [
+        "why_physical_sample_is_not_available__c"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "not_required_per_guidance_document__c",
+          "label": "Not Required per Guidance Document"
+        },
+        {
+          "name": "picture_available_sample_not_required__c",
+          "label": "Picture Available - Sample not Required"
+        },
+        {
+          "name": "usability_issue_sample_not_required__c",
+          "label": "Usability Issue"
+        },
+        {
+          "name": "sample_discarded__c",
+          "label": "Sample Discarded"
+        },
+        {
+          "name": "sample_misplaced_by_complainant1__c",
+          "label": "Sample Misplaced"
+        },
+        {
+          "name": "contaminated_sample_biohazard__c",
+          "label": "Contaminated Sample (Biohazard)"
+        },
+        {
+          "name": "complainant_refused__c",
+          "label": "Complainant Refused"
+        },
+        {
+          "name": "unit_still_inserted__c",
+          "label": "Unit Still Inserted"
+        },
+        {
+          "name": "unsuccessful_insertion_sample_not_requ1__c",
+          "label": "Unsuccessful Insertion - Sample not Required"
+        },
+        {
+          "name": "no_contact_information_provided__c",
+          "label": "No Contact Information Provided"
+        },
+        {
+          "name": "batchproduct_information__c",
+          "label": "Batch/Product Information"
+        },
+        {
+          "name": "marketing_study__c",
+          "label": "Marketing Study"
+        },
+        {
+          "name": "litigation_case__c",
+          "label": "Litigation Case"
+        },
+        {
+          "name": "empty_containerbox__c",
+          "label": "Empty Container/Box"
+        },
+        {
+          "name": "no_response_about_the_sample_received__c",
+          "label": "No response about the sample received"
+        },
+        {
+          "name": "other__c",
+          "label": "Other"
+        },
+        {
+          "name": "na__c",
+          "label": "N/A"
+        }
+      ]
+    },
+    {
+      "picklist": "within_warranty__v",
+      "used_by_fields": [
+        "within_warranty__v"
+      ],
+      "controlling_picklist": null,
+      "values": [
+        {
+          "name": "yes__c",
+          "label": "Yes"
+        },
+        {
+          "name": "no__c",
+          "label": "No"
+        },
+        {
+          "name": "na__c",
+          "label": "N/A"
+        }
+      ]
+    }
+  ]
+}
