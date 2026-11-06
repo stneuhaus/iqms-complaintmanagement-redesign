@@ -1,0 +1,172 @@
+<mxfile host="65bd71144e">
+    <diagram id="complaint-email-object-model" name="Complaint Email Object Model">
+        <mxGraphModel dx="1342" dy="1826" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="950" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="legend" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontColor=#333333;fontSize=11;verticalAlign=top;align=left;spacingLeft=8;spacingTop=4;" value="&lt;b&gt;Legend&lt;/b&gt;&lt;br&gt;Gray = mail infrastructure (Vault config / Email record)&lt;br&gt;Orange = processor / action (logic that runs)&lt;br&gt;Blue = QMS data object (record)&lt;br&gt;Red = non-complaint / rejection path&lt;br&gt;Dashed edge = reference / lookup, not creation&lt;br&gt;[26R3 LR] = Limited Release only, not yet General Release (added 2026-11-05)" vertex="1">
+                    <mxGeometry height="110" width="300" x="20" y="720" as="geometry"/>
+                </mxCell>
+                <mxCell id="mbx1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8EAED;strokeColor=#5F6368;fontColor=#202124;fontSize=12;fontStyle=1;" value="Inbound Email Address #1&lt;br&gt;complaints@&amp;lt;subdomain&amp;gt;.veevavault.com&lt;br&gt;Allowed Senders = Anyone" vertex="1">
+                    <mxGeometry height="80" width="260" x="40" y="-160" as="geometry"/>
+                </mxCell>
+                <mxCell id="proc1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E5;strokeColor=#E8A33D;fontColor=#7A4E00;fontSize=12;fontStyle=1;" value="Email Processor:&lt;br&gt;Create Complaint" vertex="1">
+                    <mxGeometry height="60" width="200" x="360" y="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="intake" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#1A3A66;fontSize=12;fontStyle=1;" value="Complaint Intake&lt;br&gt;(triage object)" vertex="1">
+                    <mxGeometry height="70" width="220" x="660" y="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="contact" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#1A3A66;fontSize=12;" value="Complaint Contact&lt;br&gt;Object Type: Initial Reporter&lt;br&gt;(required, max 1 per Intake)" vertex="1">
+                    <mxGeometry height="70" width="220" x="990" y="-100" as="geometry"/>
+                </mxCell>
+                <mxCell id="person" parent="1" style="rounded=1;dashed=1;whiteSpace=wrap;html=1;fillColor=#E8EAED;strokeColor=#5F6368;fontColor=#202124;fontSize=12;" value="Person&lt;br&gt;(Vault user / licensed)&lt;br&gt;not supported on Intake" vertex="1">
+                    <mxGeometry height="70" width="200" x="1260" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="emailrec" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8EAED;strokeColor=#5F6368;fontColor=#202124;fontSize=12;" value="Email&lt;br&gt;(.EML + attachments)&lt;br&gt;Status: Received/Bounced/Failed" vertex="1">
+                    <mxGeometry height="70" width="260" x="40" y="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="product" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#1A3A66;fontSize=12;" value="Reported Product" vertex="1">
+                    <mxGeometry height="60" width="220" x="980" y="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="followup" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#1A3A66;fontSize=12;fontStyle=1;" value="Complaint Intake Follow-Up&lt;br&gt;(26R3 LR: Email Collaboration)" vertex="1">
+                    <mxGeometry height="70" width="240" x="660" y="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="followupemail" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#1A3A66;fontSize=12;" value="Complaint Intake Follow-Up Email&lt;br&gt;Direction: Outbound / Inbound" vertex="1">
+                    <mxGeometry height="70" width="240" x="980" y="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="mbx2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8EAED;strokeColor=#5F6368;fontColor=#202124;fontSize=12;fontStyle=1;" value="Inbound Email Address #2&lt;br&gt;Follow-up replies&lt;br&gt;Allowed Senders = All Users &amp; Persons&lt;br&gt;(real sender: Bayer auto-forward system)" vertex="1">
+                    <mxGeometry height="90" width="280" x="1280" y="290" as="geometry"/>
+                </mxCell>
+                <mxCell id="proc2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E5;strokeColor=#E8A33D;fontColor=#7A4E00;fontSize=12;fontStyle=1;" value="Complaint Intake Follow-Up&lt;br&gt;Email Processor&lt;br&gt;(matches Root Message ID)" vertex="1">
+                    <mxGeometry height="70" width="240" x="1280" y="420" as="geometry"/>
+                </mxCell>
+                <mxCell id="promote" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E5;strokeColor=#E8A33D;fontColor=#7A4E00;fontSize=12;fontStyle=1;" value="Action: Promote to Complaint&lt;br&gt;(runs once per Intake)" vertex="1">
+                    <mxGeometry height="60" width="220" x="660" y="460" as="geometry"/>
+                </mxCell>
+                <mxCell id="complaint" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#1A3A66;fontSize=12;fontStyle=1;" value="Complaint&lt;br&gt;(or Quality Event, Object Type Complaint)" vertex="1">
+                    <mxGeometry height="70" width="240" x="980" y="455" as="geometry"/>
+                </mxCell>
+                <mxCell id="sentnotif" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8EAED;strokeColor=#5F6368;fontColor=#202124;fontSize=12;" value="Quality Event Sent Notification / Email&lt;br&gt;(delivery tracking, general)" vertex="1">
+                    <mxGeometry height="60" width="240" x="360" y="590" as="geometry"/>
+                </mxCell>
+                <mxCell id="followupsentnotif" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8EAED;strokeColor=#5F6368;fontColor=#202124;fontSize=12;" value="Complaint Intake Followup Sent Notif&lt;br&gt;(delivery tracking, Follow-Up specific)&lt;br&gt;[26R3 LR]" vertex="1">
+                    <mxGeometry height="70" width="240" x="980" y="590" as="geometry"/>
+                </mxCell>
+                <mxCell id="followupeval" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#1A3A66;fontSize=12;fontStyle=1;" value="Followup Evaluation&lt;br&gt;1 record per active Complaint&lt;br&gt;[26R3 LR, only after Promote]" vertex="1">
+                    <mxGeometry height="70" width="240" x="660" y="720" as="geometry"/>
+                </mxCell>
+                <mxCell id="nonComplaint" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#D93025;fontColor=#8C1D18;fontSize=12;fontStyle=1;" value="Spam / advertisement / misdirected mail&lt;br&gt;Rejected or closed after triage&lt;br&gt;(manual, or Bayer AI classification layer)&lt;br&gt;never promoted" vertex="1">
+                    <mxGeometry height="90" width="280" x="660" y="590" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" edge="1" parent="1" source="mbx1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5F6368;" target="emailrec" value="stores raw message">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" edge="1" parent="1" source="mbx1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5F6368;" target="proc1" value="invokes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" edge="1" parent="1" source="proc1" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#5F6368;" target="emailrec" value="reads/parses">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" edge="1" parent="1" source="proc1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#2D6A4F;" target="intake" value="creates (new thread) / attaches (Message-ID match)">
+                    <mxGeometry relative="1" y="-60" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e5" edge="1" parent="1" source="intake" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1A3A66;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" target="contact" value="1:N (required)">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" edge="1" parent="1" source="intake" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1A3A66;" target="product" value="1:N">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1090" y="100"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e7" edge="1" parent="1" source="intake" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#8C1D18;" target="person" value="not supported">
+                    <mxGeometry relative="1" x="-0.275" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1070" y="80"/>
+                            <mxPoint x="1070" y="10"/>
+                            <mxPoint x="1360" y="10"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e8" edge="1" parent="1" source="intake" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1A3A66;" target="followup" value="1:N, Send External Notification">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" edge="1" parent="1" source="followup" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1A3A66;" target="followupemail" value="1:N, one record per send/reply">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" edge="1" parent="1" source="followupemail" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#5F6368;" target="mbx2" value="Reply-To points here (outbound)">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" edge="1" parent="1" source="mbx2" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5F6368;" target="proc2" value="auto-forwarded reply (not redirect)">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e12" edge="1" parent="1" source="proc2" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#2D6A4F;" target="followupemail" value="attaches inbound reply (Root Message ID)">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1400" y="380"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e13" edge="1" parent="1" source="proc2" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#8C1D18;" target="intake" value="no match -&gt; creates NEW Complaint Intake (duplicate risk)">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1400" y="620"/>
+                            <mxPoint x="780" y="620"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e14" edge="1" parent="1" source="intake" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1A3A66;" target="promote" value="triggers (once only)">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e15" edge="1" parent="1" source="promote" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#2D6A4F;" target="complaint" value="creates (1:N if Split by Batch)">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e16" edge="1" parent="1" source="complaint" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#1A3A66;" target="intake" value="reference field &#39;Complaint Intake&#39; (read-only lookup); exposes Contacts/Products/Follow-Ups">
+                    <mxGeometry relative="1" x="-0.0081" as="geometry">
+                        <mxPoint as="offset"/>
+                        <Array as="points">
+                            <mxPoint x="1460" y="490"/>
+                            <mxPoint x="1460" y="80"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e17" edge="1" parent="1" source="complaint" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1A3A66;" target="person" value="optional (Person supported here)">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e18" edge="1" parent="1" source="intake" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#5F6368;" target="sentnotif" value="Tracked Emails">
+                    <mxGeometry relative="1" x="0.3304" y="-30" as="geometry">
+                        <mxPoint as="offset"/>
+                        <Array as="points">
+                            <mxPoint x="770" y="150"/>
+                            <mxPoint x="570" y="150"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e19" edge="1" parent="1" source="intake" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeWidth=2;strokeColor=#D93025;" target="nonComplaint" value="triage decision: not a real complaint">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e20" edge="1" parent="1" source="followup" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#1A3A66;" target="followupeval" value="[26R3 LR] creates 1:N, only if Complaint exists (via Promote)">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="780" y="660"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e21" edge="1" parent="1" source="followupeval" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#1A3A66;" target="complaint" value="references (one Followup Evaluation per active Complaint)">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="900" y="755"/>
+                            <mxPoint x="900" y="490"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e22" edge="1" parent="1" source="followupemail" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#5F6368;" target="followupsentnotif" value="[26R3 LR] Tracked Emails (Follow-Up specific)">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

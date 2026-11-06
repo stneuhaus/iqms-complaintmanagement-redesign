@@ -2,16 +2,11 @@
 
 One card per category. Fill one card for **every** category you are assigned.
 
-The purpose of this card is to turn what you already do from experience into criteria someone else — or an automated pre-check — can apply and get the same answer. Write what you **observe in the message**, not what you conclude after an investigation.
+Read the [guide](classification-decision-card.guide.md) before you start, and see the
+[filled example](classification-decision-card.example.md) for the expected level of detail.
 
-How to fill this in:
-
-- Write criteria a colleague could apply **without asking you**.
-- Prefer concrete wording over abstract rules: "sender domain is a company, not a person" beats "looks commercial".
-- If you cannot give a rule, give an example. Examples are more useful than a vague rule.
-- Say **how the criteria combine**, not just what they are. A list alone does not tell us whether all of them are required or only some — see sections 4 and 5.
-- If you genuinely don't know, write it under **Open questions**. An honest gap is more valuable than a guess — it tells us where a human must decide.
-- Anonymize all examples: no patient names, no reporter names, no addresses. Product, batch and wording may stay.
+Write what you **observe in the message**, not what you conclude after an investigation.
+Anonymize all examples: no patient names, no reporter names, no addresses.
 
 ---
 
@@ -162,6 +157,5 @@ Anything you are unsure about, where colleagues disagree, or where the SOP does 
 
 ---
 
-Save completed cards together with the workshop notes under
-`docs/01-current-process/sources/YYYY-MM-DD-cm-classification-workshop-<site>.md`,
-or as individual files next to it if there are many.
+Save as `docs/01-current-process/sources/classification-card-<category>.md`
+(category in lower case with hyphens, e.g. `classification-card-advertisement.md`).

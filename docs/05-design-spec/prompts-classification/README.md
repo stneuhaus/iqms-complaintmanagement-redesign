@@ -60,7 +60,7 @@ The prompt carries `<!-- TO BE COMPLETED -->` markers. These are **intentional g
 | Non-PTC subtype criteria | Only `ADVERTISEMENT` has written criteria (REQ-054). The rest are named but not defined. |
 | AE signal phrases | Not documented anywhere. |
 
-Collect them with the [decision card](../../templates/classification-decision-card.md) and the [workshop format](../../templates/classification-workshop.md); see the [filled example](../../templates/classification-decision-card.example.md) for the expected level of detail. Completed results go to `docs/01-current-process/sources/`.
+Collect them with the [decision card](../../templates/classification-decision-card.md) and its [filling guide](../../templates/classification-decision-card.guide.md); see the [filled example](../../templates/classification-decision-card.example.md) for the expected level of detail. Completed cards go to `docs/01-current-process/sources/classification-card-<category>.md`.
 
 Also still missing, and needed before IQMS field population can work at all: the allowed values of the `Feedback Type`, `Report Source`, `Product Type` and `Error codes` pick-lists. They are mandatory IQMS fields whose value lists appear in no document in the project set.
 

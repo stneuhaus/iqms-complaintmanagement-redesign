@@ -6,6 +6,10 @@
 *.key
 credentials.json
 
+# MCP — .mcp.json is committed and holds no secret (token comes from $N8N_MCP_TOKEN).
+# A local override would hold the token verbatim, so it never gets committed.
+.mcp.local.json
+
 # n8n
 .n8n/
 n8n-*.json.bak
@@ -32,3 +36,4 @@ desktop.ini
 *.log
 tmp/
 temp/
+.temp/*

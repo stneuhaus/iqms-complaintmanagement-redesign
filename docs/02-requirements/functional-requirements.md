@@ -6,6 +6,9 @@ Sources: as-is shadowing, URS (`nonGMP-URS-FS-RA- URS for Autoamtion platform.xl
 
 When writing a requirement: one capability, testable, no n8n node names.
 
+Classification requirements (FR-008) are backed by the SOP rule inventory in
+[classification-rules-matrix.md](classification-rules-matrix.md).
+
 | ID | Requirement | URS / source | Priority | Status |
 | --- | --- | --- | --- | --- |
 | FR-001 | Receive complaints from country-specific and grouped email inboxes; consolidate into processable intake without losing country-of-origin signal | REQ-003…005, REQ-010; as-is | Must | Draft |

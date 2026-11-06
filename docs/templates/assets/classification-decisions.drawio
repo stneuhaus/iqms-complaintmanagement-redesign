@@ -1,0 +1,173 @@
+<mxfile host="65bd71144e">
+    <diagram id="classification-decisions" name="Classification decisions">
+        <mxGraphModel dx="1825" dy="966" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1420" pageHeight="800" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="grpNonPtc" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FDF1F0;strokeColor=#D93025;fontColor=#8C1D18;fontSize=12;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;dashed=0;" value="Not PTC-relevant — does not enter IQMS" vertex="1">
+                    <mxGeometry height="308" width="540" x="32" y="218" as="geometry"/>
+                </mxCell>
+                <mxCell id="start" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#E8EAED;strokeColor=#5F6368;fontColor=#202124;fontSize=14;fontStyle=1;" value="Incoming message" vertex="1">
+                    <mxGeometry height="40" width="220" x="549" as="geometry"/>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-2" edge="1" parent="1" source="d1" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=3;fillColor=#f8cecc;strokeColor=#b85450;" target="grpNonPtc">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="305" y="130"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-3" connectable="0" parent="H0t42ktDHQOEmPQqYsWt-2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;No&lt;/font&gt;" vertex="1">
+                    <mxGeometry relative="1" x="-0.2029" y="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-4" edge="1" parent="1" source="d1" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=3;fillColor=#d5e8d4;strokeColor=#82b366;" target="d2">
+                    <mxGeometry relative="1" x="0.2667" as="geometry">
+                        <Array as="points"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-5" connectable="0" parent="H0t42ktDHQOEmPQqYsWt-4" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Yes&lt;/font&gt;" vertex="1">
+                    <mxGeometry relative="1" x="0.6833" y="-3" as="geometry">
+                        <mxPoint x="-82" y="-3" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="d1" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF4E5;strokeColor=#E8A33D;fontColor=#7A4E00;fontSize=12;" value="&lt;b&gt;DECISION 1&lt;/b&gt;&lt;br&gt;Intake gate&lt;br&gt;Is this&lt;br&gt;PTC-relevant?" vertex="1">
+                    <mxGeometry height="100" width="240" x="539" y="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="d2" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF4E5;strokeColor=#E8A33D;fontColor=#7A4E00;fontSize=12;" value="&lt;b&gt;DECISION 2&lt;/b&gt;&lt;br&gt;Case type&lt;br&gt;&lt;br&gt;Which kind of case?" vertex="1">
+                    <mxGeometry height="100" width="200" x="960" y="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="d3" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF4E5;strokeColor=#E8A33D;fontColor=#7A4E00;fontSize=12;" value="&lt;b&gt;DECISION 3&lt;/b&gt;&lt;br&gt;Adverse Event&lt;br&gt;&lt;br&gt;Health effect on a&lt;br&gt;person mentioned?" vertex="1">
+                    <mxGeometry height="110" width="240" x="480" y="580" as="geometry"/>
+                </mxCell>
+                <mxCell id="nSpam" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#D93025;fontColor=#8C1D18;fontSize=12;" value="Spam" vertex="1">
+                    <mxGeometry height="44" width="130" x="86" y="307" as="geometry"/>
+                </mxCell>
+                <mxCell id="nAd" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#D93025;fontColor=#8C1D18;fontSize=12;" value="Advertisement" vertex="1">
+                    <mxGeometry height="44" width="130" x="86" y="358" as="geometry"/>
+                </mxCell>
+                <mxCell id="nMalware" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#D93025;fontColor=#8C1D18;fontSize=12;" value="Malware" vertex="1">
+                    <mxGeometry height="44" width="130" x="86" y="410" as="geometry"/>
+                </mxCell>
+                <mxCell id="nQuestion" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#D93025;fontColor=#8C1D18;fontSize=12;" value="Product question" vertex="1">
+                    <mxGeometry height="44" width="130" x="426" y="307" as="geometry"/>
+                </mxCell>
+                <mxCell id="nReimb" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#D93025;fontColor=#8C1D18;fontSize=12;" value="Reimbursement" vertex="1">
+                    <mxGeometry height="44" width="130" x="426" y="358" as="geometry"/>
+                </mxCell>
+                <mxCell id="nDivested" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#D93025;fontColor=#8C1D18;fontSize=12;" value="Divested product" vertex="1">
+                    <mxGeometry height="44" width="130" x="256" y="307" as="geometry"/>
+                </mxCell>
+                <mxCell id="nFollowup" parent="1" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#D93025;fontColor=#8C1D18;fontSize=11;" value="Special case: &lt;b&gt;Follow-up / Duplicate&lt;/b&gt; — belongs to a case that already exists" vertex="1">
+                    <mxGeometry height="34" width="508" x="48" y="477" as="geometry"/>
+                </mxCell>
+                <mxCell id="aeNo" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F1F3F4;strokeColor=#5F6368;fontColor=#202124;fontSize=13;" value="AE flag = &lt;b&gt;no&lt;/b&gt;" vertex="1">
+                    <mxGeometry height="50" width="210" x="140" y="610" as="geometry"/>
+                </mxCell>
+                <mxCell id="aeYes" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E8F0FE;strokeColor=#1A73E8;fontColor=#174EA6;fontSize=13;" value="AE flag = &lt;b&gt;yes&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;must also reach Pharmacovigilance (ARGUS)&lt;/span&gt;" vertex="1">
+                    <mxGeometry height="58" width="320" x="830" y="606" as="geometry"/>
+                </mxCell>
+                <mxCell id="noteAe" parent="1" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#9AA0A6;fontColor=#5F6368;fontSize=13;" value="Decision 3 is asked on &lt;b&gt;every&lt;/b&gt; message — also on the&lt;br&gt;non-PTC branch. Seriousness is out of scope: PV / ARGUS decide that." vertex="1">
+                    <mxGeometry height="88" width="260" x="470" y="699" as="geometry"/>
+                </mxCell>
+                <mxCell id="notePtcAe" parent="1" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#9AA0A6;fontColor=#5F6368;fontSize=13;" value="&lt;b&gt;PTC+AE&lt;/b&gt; is the case type the SOP names for a PTC that also&lt;br&gt;reports a health effect — i.e. PTC with AE flag = yes." vertex="1">
+                    <mxGeometry height="88" width="190" x="880" y="699" as="geometry"/>
+                </mxCell>
+                <mxCell id="legendBox" parent="1" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#9AA0A6;fontColor=#5F6368;fontSize=11;fontStyle=1;verticalAlign=top;align=left;spacingLeft=8;spacingTop=2;" value="Legend" vertex="1">
+                    <mxGeometry height="120" width="268" x="12" y="670" as="geometry"/>
+                </mxCell>
+                <mxCell id="legTerm" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#E8EAED;strokeColor=#5F6368;fontColor=#202124;fontSize=10;" value="Start" vertex="1">
+                    <mxGeometry height="26" width="70" x="20" y="708" as="geometry"/>
+                </mxCell>
+                <mxCell id="legDec" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF4E5;strokeColor=#E8A33D;fontColor=#7A4E00;fontSize=10;" value="Decision" vertex="1">
+                    <mxGeometry height="34" width="90" x="100" y="704" as="geometry"/>
+                </mxCell>
+                <mxCell id="legRes" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F1F3F4;strokeColor=#5F6368;fontColor=#202124;fontSize=10;" value="Classification" vertex="1">
+                    <mxGeometry height="26" width="70" x="200" y="708" as="geometry"/>
+                </mxCell>
+                <mxCell id="legNote" parent="1" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#9AA0A6;fontColor=#5F6368;fontSize=10;" value="Note" vertex="1">
+                    <mxGeometry height="26" width="70" x="20" y="746" as="geometry"/>
+                </mxCell>
+                <mxCell id="legColour" parent="1" style="text;html=1;whiteSpace=wrap;fontColor=#5F6368;fontSize=10;align=left;verticalAlign=middle;" value="red = leaves the PTC process&#xa;green = stays in it" vertex="1">
+                    <mxGeometry height="30" width="170" x="100" y="744" as="geometry"/>
+                </mxCell>
+                <mxCell id="eStart" edge="1" parent="1" source="start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#5F6368;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=3;" target="d1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eD2Grp" edge="1" parent="1" source="d2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#1E8E3E;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="grpCaseType">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eAeNo" edge="1" parent="1" source="d3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#5F6368;fontColor=#202124;fontSize=12;fontStyle=1;endArrow=block;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=3;" target="aeNo" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;no&lt;/font&gt;">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eAeYes" edge="1" parent="1" source="d3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#1A73E8;fontColor=#174EA6;fontSize=20;fontStyle=1;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=3;" target="aeYes" value="yes">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#D93025;fontColor=#8C1D18;fontSize=12;fontStyle=1;strokeWidth=2;" value="Unwanted Content" vertex="1">
+                    <mxGeometry height="44" width="130" x="48" y="256" as="geometry"/>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-15" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#D93025;fontColor=#8C1D18;fontSize=12;fontStyle=1;strokeWidth=2;" value="Non-Ownd Product" vertex="1">
+                    <mxGeometry height="44" width="130" x="236" y="256" as="geometry"/>
+                </mxCell>
+                <mxCell id="grpCaseType" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F1F9F3;strokeColor=#1E8E3E;fontColor=#0D652D;fontSize=12;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;dashed=0;" value="Case type — stays in the PTC process" vertex="1">
+                    <mxGeometry height="259" width="610" x="755" y="218" as="geometry"/>
+                </mxCell>
+                <mxCell id="cPtc" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#1E8E3E;fontColor=#0D652D;fontSize=12;" value="PTC" vertex="1">
+                    <mxGeometry height="44" width="126" x="795" y="311" as="geometry"/>
+                </mxCell>
+                <mxCell id="cPtcAe" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#1E8E3E;fontColor=#0D652D;fontSize=12;" value="PTC+AE" vertex="1">
+                    <mxGeometry height="44" width="126" x="795" y="369" as="geometry"/>
+                </mxCell>
+                <mxCell id="cUseError" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#1E8E3E;fontColor=#0D652D;fontSize=12;" value="Use Error" vertex="1">
+                    <mxGeometry height="44" width="126" x="1001" y="311" as="geometry"/>
+                </mxCell>
+                <mxCell id="cCustSat" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#1E8E3E;fontColor=#0D652D;fontSize=11;" value="Customer Satisfaction Issue" vertex="1">
+                    <mxGeometry height="44" width="126" x="1001" y="369" as="geometry"/>
+                </mxCell>
+                <mxCell id="cCounterfeit" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#1E8E3E;fontColor=#0D652D;fontSize=11;" value="Suspected Falsification" vertex="1">
+                    <mxGeometry height="44" width="126" x="1207" y="311" as="geometry"/>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#1E8E3E;fontColor=#0D652D;fontSize=11;" value="Counterfeit" vertex="1">
+                    <mxGeometry height="44" width="126" x="1207" y="369" as="geometry"/>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#1E8E3E;fontColor=#0D652D;fontSize=12;fontStyle=1;strokeWidth=2;" value="Complaint" vertex="1">
+                    <mxGeometry height="44" width="126" x="775" y="253" as="geometry"/>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#1E8E3E;fontColor=#0D652D;fontSize=12;fontStyle=1;strokeWidth=2;" value="Usability" vertex="1">
+                    <mxGeometry height="44" width="126" x="960" y="251" as="geometry"/>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#1E8E3E;fontColor=#0D652D;fontSize=12;fontStyle=1;strokeWidth=2;" value="&lt;div style=&quot;color: rgb(0, 0, 0); font-weight: 400; text-align: start; font-family: &amp;quot;Segoe UI&amp;quot;; font-size: 14px; line-height: 20px;&quot;&gt;Product Integrity&lt;/div&gt;" vertex="1">
+                    <mxGeometry height="44" width="126" x="1185" y="251" as="geometry"/>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-19" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#D93025;fontColor=#8C1D18;fontSize=12;fontStyle=1;strokeWidth=2;" value="Other" vertex="1">
+                    <mxGeometry height="44" width="130" x="406" y="252" as="geometry"/>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-20" parent="1" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=light-dark(#f1f9f3, #1f2f1e);strokeColor=#82b366;fontSize=11;" value="Special case: &lt;b&gt;Follow-up / Duplicate&lt;/b&gt; — belongs to a case that already exists" vertex="1">
+                    <mxGeometry height="34" width="540" x="795" y="430" as="geometry"/>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-22" edge="1" parent="1" source="grpNonPtc" style="edgeStyle=elbowEdgeStyle;elbow=vertical;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0.459;exitY=0.997;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="d3" value="">
+                    <mxGeometry height="50" relative="1" width="50" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="440" y="550"/>
+                        </Array>
+                        <mxPoint x="860" y="390" as="sourcePoint"/>
+                        <mxPoint x="910" y="340" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-23" edge="1" parent="1" source="grpCaseType" style="edgeStyle=elbowEdgeStyle;elbow=vertical;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="d3" value="">
+                    <mxGeometry height="50" relative="1" width="50" x="0.0018" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="830" y="550"/>
+                        </Array>
+                        <mxPoint x="750" y="560" as="sourcePoint"/>
+                        <mxPoint x="1070" y="615" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="H0t42ktDHQOEmPQqYsWt-24" parent="1" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Classification Decession Flow&lt;/h1&gt;&lt;div style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Segoe UI&amp;quot;; font-size: 14px; line-height: 20px;&quot;&gt;The complaint classification is based on the PTC/non-PTC assignment. Because adverse events are critical, the AE check remains an explicit step in the decision tree to avoid misclassifying AE complaints as non-PTCs.&lt;/div&gt;" vertex="1">
+                    <mxGeometry height="140" width="479" x="12" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
